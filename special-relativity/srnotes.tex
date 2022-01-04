@@ -19,7 +19,7 @@
 \begin{document}
 \maketitle
 
-\section{History}
+\section{History (5-8 min)}
 Developments leading up to the theory of special relativity:
 \begin{itemize}
 	\item \textit{Light is an electromagnetic wave.} James Clerk Maxwell publishes his equations for electromagnetism (1864) and notices as a consequence that the speed of electromagnetic waves is very close to value of light ($c = 299792458$ m/s), and Heinrech Hertz (1887) is able to produce electromagnetic waves as predicted by Maxwell's theory.
@@ -29,7 +29,7 @@ Developments leading up to the theory of special relativity:
 
 In 1905, four papers by Albert Einstein were published, one of which proposed sweeping changes to classical mechanics as grounded in Newton's work, as it established a new framework for the nature of space and time itself. This paper rejected the theory of the aether altogether and would grow to become the foundation for the \textit{special} theory of relativity that we know today.
 
-\section{Main Phenomena}
+\section{Main Phenomena (12-15 min)}
 Einstein's conclusion was to accept the following two statements to build a new theory of dynamics, based on experimental evidence.
 \begin{enumerate}
 	\item (Principle of Relativity) The laws of physics are invariant in all inertial frames of reference.
@@ -58,47 +58,30 @@ In Joe's reference frame, the sides of the train are traveling in the positive $
 From the previous thought experiment, we have $t_J = \gamma t_S$, as the time interval measured by a moving observer is a factor of $\gamma$ larger. This gives us
 \[ \frac{2cL_J}{c^2-v^2} = \gamma \frac{2 L_S}{c} \Rightarrow L_J =  \frac{(c^2-v^2)}{\sqrt{1-v^2/c^2}} \cdot \frac{L_S}{c^2} = \sqrt{1-\frac{v^2}{c^2}} L_S = \frac{L_S}{\gamma} .\]
 
-Therefore, the length of the train that Joe observes is a factor of $\gamma$ shorter than the actual length of the train as measured in Sally's frame! This is the phenomenon of \textbf{length contraction: moving lengths are shorter by a factor of $\gamma$ in the frame of a stationary observer!}
+Therefore, the length of the train that Joe observes is a factor of $\gamma$ shorter than the actual length of the train as measured in Sally's frame! This is the phenomenon of \textbf{length contraction: moving lengths are shorter by a factor of $\gamma$ in the frame of a stationary observer (in the direction of motion)!}
 
-\section{Lorentz Transformations}
-\subsection*{Lorentz Transformation}
-From the time dilation experiment, we can derive a transformation that can transform between different inertial frames of reference. Note that we can represent the coordinates of an object with a vector -- however, this vector must have \textit{four} components, time and the three spatial dimensions. After all, as indicated by our thought experiments, time and space are intimately connected, as moving through space corresponds to a slowing of time, and a shortening of observed lengths. In this analysis, we'll stick to one spatial and one temporal dimension, although the analysis holds for all spatial dimensions. We can define different events by their spacetime coordinates, i.e. the time they occur and the place they occur with respect to some origin.
+One thing to note, however: lengths still remain normal along perpendicular directions to the motion. Suppose the train is going to pass through a tunnel, where if height of the train in Sally's frame at rest is $H_J$, the height of the tunnel in Joe's frame is also $H_J$. Suppose without loss of generality that moving lengths decrease in the perpendicular direction relative to a stationary observer. Then, Joe will see the train's height decrease in his reference frame, so the train will fit in the tunnel, but Sally will see the tunnel's height shrink, so the train will not fit in the tunnel. Both of these things cannot be simultaneously true! As such, we see that length contraction only happens in directions parallel to the motion, but \textbf{not} in any perpendicular directions!
 
-When we derive the nature of the transformation that can transform between different inertial frames of reference, we assume that this transformation has to be \textit{linear}. What I mean here is that the transformation satisfies two basic properties:
-\begin{enumerate} % fix?  
-	\item \textit{Additivity} -- we get the same result if we add two spacetime intervals and transform it into a different frame, or if we transform the two intervals first and then add them together. For example, if I walk 2m and then 3m in my frame, and Rubaiya is whizzing by me at % finish thought
-	\item \textit{Scalability} -- we get the same result if we take a transformed interval and scale it, or if we scale an interval first and then transform it.
-\end{enumerate}
+\section{Lorentz Transformations (10-12 min)}
+Using the above phenomena, we would like to figure out how to describe transformations between different inertial frames of reference. After all, as indicated by our thought experiments, time and space are intimately connected, as moving through space corresponds to a slowing of time, and a shortening of observed lengths. As such, these transformations between different inertial reference frames have to have some  ``mixing'' of the space and time coordinates.
 
-With the property that the transformation is linear, we can declare that our transformation between frames can be modeled as a matrix $\Lambda$, acting on a vector of our coordinates:
+Note that along with caring about where things are in space, we also have to care about where things are in time, so we would like to use vectors that represent the \textit{spacetime} coordinates of an object. This vector must have \textit{four} components, time and the three spatial dimensions, but if we're sticking with motion in one dimension as we are now, we can just think about the time $t$ and position $x$.
+
+When we derive the nature of the transformation that can transform between different inertial frames of reference, we assume that this transformation has to be \textit{linear}. What I mean here is that if we have a displacement vector of sorts describing the differences in space and time between two events $\bmat{\Delta t \\ \Delta x}$, and if this same displacement vector viewed in another reference frame is $\bmat{\Delta t' \\ \Delta x'}$, then $\Delta t'$ can only depend linearly on $\Delta t$ and $\Delta x$, and same for $\Delta x'$. If this were not the case, then objects moving at constant velocity would accelerate in others, introducing strange fictitious forces and things... and we don't want that at all.
+
+With the property that the transformation is linear, we can declare that our transformation between frames can be modeled as a $2 \times 2$ matrix $\Lambda(v)$, acting on a vector of our coordinates:
 \[
-	\begin{pmatrix}
-		t_1 \\ x_1
-	\end{pmatrix} = \begin{pmatrix}
-		? & ? \\ ? & ?
-	\end{pmatrix}\begin{pmatrix}
-		t_0 \\ x_0
-	\end{pmatrix}
+	\bmat{\Delta t' \\ \Delta x'} = \bmat{? & ? \\ ? & ?} \bmat{\Delta t \\ \Delta x}
 \]
-Clearly, our matrix can only be a function of the velocity $v$ that we're trying to boost our second coordinates into, which helps somewhat\ldots Let's use our time dilation thought experiment --  in Sally's frame, the time the photon returns to her is $t_S = \frac{2h}{c}$, at position $x_S = 0$. In Joe's frame, the photon returns at time $t_J = \frac{2h}{c}\gamma = \gamma t_S$, in which the photon has moved to the right by $\gamma v t_S$ due to the train having moved in his frame in that time. This allows us to conclude the form of the entries in the left-hand column:
+Clearly, our matrix can only be a function of the velocity $v$ that we're trying to boost our second coordinates into, which helps somewhat\ldots (This follows from isotropy and homogeneity of space.)
+
+Here, let's use our experiments from above. Suppose our matrix represents the transformation from Sally's coordinates (moving) into Joe's coordinates (stationary). Let's use our time dilation thought experiment, and consider the photon in the clock in Sally's frame. Recall that in Sally's frame, the time it takes for the photon to return to her is $\Delta t = \frac{2h}{c}$, but Joe sees the photon return to Sally in time $\Delta t' = \frac{2h}{c}\gamma = \gamma \Delta t$, in which the photon has moved to the right by $\Delta x' = v \Delta t' = \gamma v \Delta t$ due to Sally having moved forwards on the train relative to Joe in that time. This allows us to conclude the form of the entries in the left-hand column:
 \[
-	\begin{pmatrix}
-		t_J \\ x_J
-	\end{pmatrix} = \begin{pmatrix}
-		\gamma & a(v) \\ \gamma v & b(v)
-	\end{pmatrix}\begin{pmatrix}
-		t_S \\ x_S
-	\end{pmatrix}
+	\bmat{\Delta t' \\ \Delta x'} = \bmat{\gamma & a(v) \\ \gamma v & b(v)} \bmat{ \Delta t \\ \Delta x }
 \]
-In order to conclude the form of the other two entries, notice that simply flipping $v$ to $-v$ will the boost that will take Joe's frame in which Sally is moving at speed $v$ on the train to Sally's frame, in which she is stationary. This should also correspond to the matrix's inverse! Hence, we require that
+In order to conclude the form of the other two entries, notice that simply flipping $v$ to $-v$ will give the boost that represents the transformation from Joe's coordinates (stationary) to Sally's coordinates (moving). This should also correspond to the matrix's inverse, as doing these two transformations one after the other should give the identity! Hence, we require that
 \[
-	\begin{pmatrix}
-		\gamma & a(v) \\ \gamma v & b(v)
-	\end{pmatrix}\begin{pmatrix}
-		\gamma & a(-v) \\ -\gamma v & b(-v)
-	\end{pmatrix} = \begin{pmatrix}
-		1 & 0 \\ 0 & 1
-	\end{pmatrix}
+	\bmat{\gamma & a(v) \\ \gamma v & b(v)} \bmat{\gamma & a(-v) \\ -\gamma v & b(-v)} = \bmat{1 & 0 \\ 0 & 1}
 \]
 The equations useful for us will be
 \[
@@ -112,112 +95,102 @@ Plutting into the second:
 \[
 	-\frac{\gamma^2 v}{c^2} + \frac{\gamma v}{c^2} b(v) = 0 \implies b(v) = \gamma
 \]
-This gives us the transformation that takes a frame at rest into coordinates in which that frame is moving $v$ to the right, a \textbf{Lorentz Transformation}.
-Unfortunately, the dimensions of the matrix are sort of all over the place - we got speed and speed inverse, as well as dimensionless constants. To rectify this, we fold in the speed of light into the time component of our vectors, in order to make everything have the same dimension:
+This gives us the linear transformation that takes a frame at rest and sends that frame moving $v$ to the right, or in other words it takes an event in the moving coordinate system and sends it to the coordinates of an event in the stationary coordinate system.
+
+Unfortunately, the dimensions of the matrix are sort of all over the place - we got entries that have units [m/s] and [s/m], as well as dimensionless constants. To rectify this, we fold in the speed of light into the time component of our vectors, in order to make everything have the same dimension:
 \[
-	\begin{pmatrix}
-		t_1 \\ x_1
-	\end{pmatrix} = \begin{pmatrix}
-		\gamma & \frac{\gamma v}{c^2} \\ \gamma v & \gamma
-	\end{pmatrix}\begin{pmatrix}
-		t_0 \\ x_0
-	\end{pmatrix} = \begin{pmatrix}
-		\gamma t_0 + \frac{\gamma v}{c^2}x_0 \\ \gamma v t_0 + \gamma x_0
-	\end{pmatrix} \implies \begin{pmatrix}
-		ct_1 \\ x_1
-	\end{pmatrix} = \begin{pmatrix}
-		\gamma c t_0 + \frac{\gamma v}{c}x_0 \\ \frac{\gamma v}{c} \cdot t_0 + \gamma x_0 \end{pmatrix}= \begin{pmatrix}
+	\bmat{\Delta t' \\ \Delta x}
+	= \bmat{\gamma & \frac{\gamma v}{c^2} \\ \gamma v & \gamma} \bmat{\Delta t \\ \Delta x}
+	= \bmat{\gamma \Delta t + \frac{\gamma v}{c^2}\Delta x
+		\\ \gamma v \Delta t + \gamma \Delta x}
+	\implies
+	\bmat{c\Delta t' \\ \Delta x'}
+	= \bmat{\gamma c \Delta t + \frac{\gamma v}{c}\Delta x
+		\\ \frac{\gamma v}{c} \cdot c \Delta t + \gamma \Delta x }
+	= \bmat{
 		\gamma & \frac{\gamma v}{c} \\ \frac{\gamma v}{c} & \gamma
-	\end{pmatrix}\begin{pmatrix}
-		ct_0 \\ x_0
-	\end{pmatrix}
+	}\bmat{
+		c\Delta t \\ \Delta x
+	}
 \]
-We will use the following notation for the Lorentz Transformation $\Lambda (v)$:
+Our newly-derived matrix is called the \textbf{Lorentz transformation} $\Lambda (v)$\footnote{If you look this up online, you'll see that most online resources have the off-diagonal terms negated. Usually people take this matrix with off-diagonal matrices negated as the standard ``Lorentz transformation,'' but this version is what I initially learned/what I'm used to. }, with all entries dimensionless:
 \[
-	\Lambda (v) = \begin{pmatrix}
+	\Lambda (v) = \bmat{
 		\gamma & \frac{\gamma v}{c} \\ \frac{\gamma v}{c} & \gamma
-	\end{pmatrix}
+	}
 \]
 
 %%% discussion including all four dimensions
-
 In general, we consider \textbf{4-vectors}, denoted $x^\mu$, with four components denoted like so:
 \[
 	x^\mu = \fourvec{ct}{x}{y}{z} = \fourvec{x^0}{x^1}{x^2}{x^3}
 \]
-where the superscripts aren't exponents, they're indices. The placement of the index is (for right now) not super relevant, but you'll also see the index placed downstairs as a subscript. $x^\mu$ can sort of refer to the vector as a whole, but also $\mu$ takes on values of $0, 1, 2, 3$ -- so specific values of $\mu$ reference specific components of the vector. This is sort of a confusing consequence of Einstein summation convention, but I hope it's not too hard to get used to.
+where the superscripts aren't exponents, they're indices. The placement of the index is (for right now) not super relevant, but you'll also see the index placed downstairs as a subscript. $x^\mu$ can refer to the vector as a whole, but also $\mu$ can take on values of $0, 1, 2, 3$ -- so specific values of $\mu$ reference specific components of the vector. This is sort of a confusing consequence of Einstein summation convention, but I hope it's not too hard to get used to.
 
-Boosting into a frame backwards so that a frame originally at rest is now moving at velocity $v$ in the $x$-direction should not affect position in the $y$ and $z$ directions, so extending the Lorentz Transformation should naturally give
+We can extend the Lorentz transformation to act on 4-vectors, noting that nothing happens to perpendicular directions as noted above, so extending the Lorentz transformation should naturally give
 \[
-	\Lambda(v \hat i) =
-	\begin{pmatrix}
+	\Lambda(v \ihatt) =
+	\bmat{
 		\gamma             & \gamma \frac{v}{c} & 0 & 0 \\
 		\gamma \frac{v}{c} & \gamma             & 0 & 0 \\
 		0                  & 0                  & 1 & 0 \\
 		0                  & 0                  & 0 & 1
-	\end{pmatrix}
+	}
 \]
 
 We can similarly do this for the other two perpendicular directions:
 %fill 
-\[ \Lambda(v\hat{j}) =
-	\begin{pmatrix}
+\[ \Lambda(v \jhatt) =
+	\bmat{
 		\gamma             & 0 & \gamma \frac{v}{c} & 0 \\
 		0                  & 1 & 0                  & 0 \\
 		\gamma \frac{v}{c} & 0 & \gamma             & 0 \\
 		0                  & 0 & 0                  & 1
-	\end{pmatrix}
-\]
-\[ \Lambda(v\hat{k}) =
-	\begin{pmatrix}
+	}
+	\quad
+	\Lambda(v\hat{\bf k}) =
+	\bmat{
 		\gamma             & 0 & 0 & \gamma\frac{v}{c} \\
 		0                  & 1 & 0 & 0                 \\
 		0                  & 0 & 1 & 0                 \\
 		\gamma \frac{v}{c} & 0 & 0 & \gamma
-	\end{pmatrix}
+	}
 \]
 
 %%% "addition of velocity"?
 \subsection*{Velocity Addition}
-Now let's study the problem of how to add parallel velocities in special relativity. Suppose that we have a rocket moving at speed $u$ relative to the lab frame. The rocket launches a torpedo at speed $w$ relative to the rocket. What is the speed of the torpedo in the lab frame?
+Now, let's study the problem of how to add parallel velocities in special relativity. Suppose that we have a rocket moving at speed $u$ in the $x$-direction relative to some stationary observer (the lab frame). The rocket launches a torpedo at speed $v$ relative to the rocket. Let's see if we can find the speed of the torpedo in the lab frame, $w$.
 
-The time-position vector of the torpedo in the boat frame is
-\[\begin{pmatrix}
-		ct \\ wt
-	\end{pmatrix}. \] Applying the Lorentz transformation, we find that in the lab frame the vector is
+In a time $t$, the time-position vector of the torpedo in the rocket frame is $\bmat{ct \\ vt}$. Applying the Lorentz transformation, we find that in the lab frame the vector is
 \[
-	\begin{pmatrix}
-		\gamma c t + \gamma \frac{u}{c } w t \\
-		\gamma u t + \gamma w t.
-	\end{pmatrix}
+	\bmat{
+		\gamma c t + \gamma \frac u c v t \\
+		\gamma u t + \gamma v t.
+	}
 \]
 The speed can be found by dividing the position by the time:
 \[
-	v = \frac{\gamma u + \gamma w}{\gamma + \gamma \frac{uw}{c^2}} = \frac{u+w}{1+\frac{uw}{c^2}}.
+	w = \frac{\gamma u + \gamma v}{\gamma + \gamma \frac{uv}{c^2}} = \frac{u+v}{1+\frac{uv}{c^2}}.
 \]
-This is the velocity addition formula. Note that, no matter how close $u$ and $w$ come to the speed of light, $v$ never exceeds $c$.
+This is the velocity addition formula in special relativity -- note how it is not just $u + v$ anymore! Also, no matter how close $u$ and $v$ come to the speed of light, $w$ never exceeds $c$, which is exactly as intended :)
 
-\section{Spacetime Diagrams and World Lines}
-One helpful tool for showing the motion of relativistic particles is the spacetime diagram. The spacetime diagram shows the $ct$-$x$ plane. An event, a point of fixed $x$ and $ct$, is shown by a point on the diagram. The path of a particle on the spacetime diagram is called its \textit{world line}.
+\section{Spacetime Diagrams and World Lines (INCOMPLETE)}
+One helpful tool for showing the motion of relativistic particles is the \textbf{spacetime diagram}, also known as the \textbf{Minkowski diagram}. The spacetime diagram shows the $ct$-$x$ plane. An event, a point of fixed $x$ and $ct$, is shown by a point on the diagram. The path of a particle on the spacetime diagram is called its \textbf{world line}.
 
 The world line of light is always a 45-degree line in any spacetime diagram because the speed of light is constant in every frame. If we add another spatial dimension, light rays define a light cone. Only events within the light cone surrounding an event (a point on the spacetime diagram) can affect or be affected by that event.
 
 We can show transformations between different reference frames on spacetime diagrams.
 
-\section{Loss of Simultaneity}
-Suppose one observer is at the middle of a traincar of length $2L$ moving at speed $v$ in the $x$-direction. The other observer is standing stationary on the train platform. Let a flash of light be emitted at the center of the train just as the observers pass each other. Let the emission take place at the origin for both observers.
+\section{Loss of Simultaneity (somewhat incomplete)}
+We'll use all of the results so far to discuss a surprising result: the relativity of simultaneity! Events that may happen simultaenously in one frame may not be simultaneous in another. Here's how.
 
-According to the observer on the train, the events of the pulses hitting the sides of the train correspond to time-position vectors of
-\[\begin{pmatrix}
-		L \\ L
-	\end{pmatrix} \] and \[\begin{pmatrix}
-		L \\ -L
-	\end{pmatrix}. \] These transform to
-\[\begin{pmatrix}
-		L\gamma\left(1+\frac{v}{c}\right) \\ L\gamma\left(1+\frac{v}{c}\right)
-	\end{pmatrix} \] and \[\begin{pmatrix}
-		L\gamma\left(1-\frac{v}{c}\right) \\ L\gamma\left(1+\frac{v}{c}\right)
-	\end{pmatrix}. \]
-The events are not simultaneous in the frame of the observer at rest. Intuitively, this is because the train is moving forward, so the light pulse hitting the back of the train should do so before the pulse hitting the front. This is, in fact, what the calculations show.
+Suppose Sally is in  the middle of a traincar of length $2L$ moving at speed $v$ in the $+x$-direction, and Joe is standing stationary on the train platform. Let's suppose a flash of light is emitted at the center of the train just as Joe and Sally pass each other, and let's suppose the emission of the light is at the origin in spacetime for both Sally and Joe, without loss of generality.
+
+According to Sally, then, the events of the pulses hitting the front and back of the train have spacetime coordinates of $x_F^\mu = \bmat{L \\ L}$ and $x_B^\mu = \bmat{L \\ -L}$, respectively. We can apply a Lorentz transformation, and see that these events transform to ${x'_F}^\mu = \bmat{\gamma & \frac{\gamma v}{c} \\ \frac{\gamma v}{c} & \gamma}  \bmat{L \\ L} =
+	\bmat{L\gamma\left(1+\frac{v}{c}\right) \\ L\gamma\left(1+\frac{v}{c}\right)}$ and
+${x'_B}^\mu = \bmat{\gamma & \frac{\gamma v}{c} \\ \frac{\gamma v}{c} & \gamma}  \bmat{L \\ -L} = \bmat{L\gamma\left(1-\frac{v}{c}\right) \\ L\gamma\left(-1+\frac{v}{c}\right)}$, respectively, in Joe's frame. Note that because the top coordinate in each of these vectors is not the same, we see that the events are not simultaneous in Joe's reference frame! Intuitively, this is because the train is moving forward, so a light pulse should hit the back of the train  before the other light pulse hits the front. This is, in fact, what the calculations show.
+
+We can see this also on a spacetime diagram!
+
 
 \end{document}
