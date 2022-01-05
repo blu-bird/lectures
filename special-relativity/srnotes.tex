@@ -2,6 +2,16 @@
 \usepackage{blubird}
 % has options [nodate, nosans, nofancy, nocolor, code]
 
+\usepackage{import}
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[2]{
+    \def\svgscale{#1}
+    \input{#2.pdf_tex}
+}
+
+
 % box setup - should be moved to somewhere nicer
 \mdfsetup{
 	roundcorner = 2pt,
@@ -176,15 +186,19 @@ This is the velocity addition formula in special relativity -- note how it is no
 
 \section{Spacetime Diagrams and World Lines (INCOMPLETE)}
 One helpful tool for showing the motion of relativistic particles is the \textbf{spacetime diagram}, also known as the \textbf{Minkowski diagram}. The spacetime diagram shows the $ct$-$x$ plane. An event, a point of fixed $x$ and $ct$, is shown by a point on the diagram. The path of a particle on the spacetime diagram is called its \textbf{world line}.
+\begin{center}
+	\incfig{2.5}{figures/minkowski-diag}
+\end{center}
+We've drawn in two diagonal dotted lines to represent the world lines of light. The scale on a spacetime diagram is such that the world line of light is always at a 45-degree angle, as the speed of light is constant in every frame. Paths can only have slope at least 1, then, as $\frac{c \, dt}{dx} \geq 1 \Leftrightarrow c \geq \dv x t$, which is mandated by our assumptions in special relativity.
 
-The world line of light is always a 45-degree line in any spacetime diagram because the speed of light is constant in every frame. If we add another spatial dimension, light rays define a light cone. Only events within the light cone surrounding an event (a point on the spacetime diagram) can affect or be affected by that event.
+We could add in the other two spatial dimensions, but then a 4-dimensional diagram is... a little hard to draw. Sometimes we do include another spatial dimension, and here we see the light rays from the origin give a two-sided \textbf{light cone} from the origin. Only events within the light cone surrounding an event on the diagram can affect or be affected by that event, as otherwise we would have to have something (action, information) travel faster than the speed of light in order for there to be an effect. Special relativity therefore has implications about the nature of causality itself, which is maybe an unexpected consequence of this theory!
 
-We can show transformations between different reference frames on spacetime diagrams.
+One of the real strengths of the Minkowski diagram is that it can show different reference frames at the same time. Let's use our length contraction example,
 
 \section{Loss of Simultaneity (somewhat incomplete)}
 We'll use all of the results so far to discuss a surprising result: the relativity of simultaneity! Events that may happen simultaenously in one frame may not be simultaneous in another. Here's how.
 
-Suppose Sally is in  the middle of a traincar of length $2L$ moving at speed $v$ in the $+x$-direction, and Joe is standing stationary on the train platform. Let's suppose a flash of light is emitted at the center of the train just as Joe and Sally pass each other, and let's suppose the emission of the light is at the origin in spacetime for both Sally and Joe, without loss of generality.
+Suppose Sally is in the middle of a traincar of length $2L$ moving at speed $v$ in the $+x$-direction, and Joe is standing stationary on the train platform. Let's suppose a flash of light is emitted at the center of the train just as Joe and Sally pass each other, and let's suppose the emission of the light is at the origin in spacetime for both Sally and Joe, without loss of generality.
 
 According to Sally, then, the events of the pulses hitting the front and back of the train have spacetime coordinates of $x_F^\mu = \bmat{L \\ L}$ and $x_B^\mu = \bmat{L \\ -L}$, respectively. We can apply a Lorentz transformation, and see that these events transform to ${x'_F}^\mu = \bmat{\gamma & \frac{\gamma v}{c} \\ \frac{\gamma v}{c} & \gamma}  \bmat{L \\ L} =
 	\bmat{L\gamma\left(1+\frac{v}{c}\right) \\ L\gamma\left(1+\frac{v}{c}\right)}$ and
