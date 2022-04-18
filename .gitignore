@@ -24,3 +24,5 @@
 *.pre
 *.fls
 *.fdb_latexmk
+blubird.sty
+blubase.sty
