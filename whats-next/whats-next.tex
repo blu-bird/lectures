@@ -1,0 +1,195 @@
+\documentclass[12pt]{article}
+\usepackage{blubird}
+% has options [nodate, nosans, nofancy, nocolor, code]
+
+% TITLE
+\title{What's Next?}
+\author{Bryan Lu}
+\date{5 June 2023} % do not use if [nodate] option enabled
+
+\begin{document}
+\maketitle
+
+\noindent {\large \textbf{Question.} What does math/doing math mean to you?}
+
+\noindent More specific prompts:
+\begin{center} 
+\begin{multicols}{2}
+  \begin{itemize}
+    \item Why do you want to study math?
+    \item Do you like math? Why? 
+    \item How could you learn about math outside of school/VMT?
+    \item What does being ``good'' at math mean?
+    \item How diverse is the math community?  
+    \item Does doing math make you ``smarter?''
+    \item Why should people study math?
+  \end{itemize}
+\end{multicols}
+\end{center}
+% 5 minutes
+
+\section{The Landscape} % (10 minutes)
+\begin{center}
+  \begin{minipage}{0.45\textwidth}
+    Competition math categories: 
+    \begin{itemize}
+      \item algebra (inequalities, FEs)
+      \item geometry (mostly Euclidean)
+      \item combinatorics 
+      \item number theory (elementary) 
+    \end{itemize}
+  \end{minipage}
+  \begin{minipage}{0.45\textwidth}
+    TJ Math (engineering requirements): 
+  \begin{itemize}
+    \item calculus sequence (BC + multi)  
+    \item linear algebra 
+    \item differential equations
+    \item statistics 
+  \end{itemize}
+  \end{minipage}
+\end{center}
+This is \tbf{VERY FAR} from everything that's out there! 
+
+\noindent Classical undergraduate categories:
+\begin{center}
+  \begin{minipage}{0.45\textwidth}
+    Main categories of study: 
+    \begin{itemize}
+      \item (abstract) algebra 
+      \item analysis/measure
+      \item topology/geometry
+    \end{itemize}
+  \end{minipage}
+  \begin{minipage}{0.45\textwidth}
+    Less central categories:
+    \begin{itemize}
+      \item combinatorics
+      \item logic/set theory
+      \item probability/statistics
+    \end{itemize}
+  \end{minipage}
+\end{center}
+These are not clean divisions -- lots of overlap between these areas of study! 
+
+\noindent Categorization is even trickier beyond curriculums, but some
+broad fields that incorporate many of the above fields and carry
+significant historical importance/development (there are many more!):
+\begin{center}
+  \begin{multicols}{3}
+    \begin{itemize}
+      \item algebraic number theory
+      \item analytic number theory
+      \item dynamical systems
+      \item Lie theory
+      \item harmonic analysis
+      \item operator theory
+      \item computer science
+      \item foundations
+      \item game theory/economics
+      \item algebraic geometry
+      \item algebraic topology
+      \item mathematical physics 
+    \end{itemize}
+  \end{multicols}
+\end{center}
+
+\section{Ideas}
+\tit{Myths/Misconceptions}: 
+\begin{enumerate}[label=(\alph*)]
+  \item Proving really \tbf{hard} theorems/solving really \tbf{hard} problems
+    (misplaced emphasis) 
+  \item Formalism vs. pedantry
+  \item Working on your own vs. community of ideas
+  \item Difficulty as a barrier to growth
+  \item (there are probably tons more \dots)  
+\end{enumerate}
+\textbf{Core ideas} to keep in mind: 
+\begin{enumerate}[label=(\arabic*)]
+  \item Connecting seemingly unrelated objects/procedures.  
+  \item Extending/generalizing ideas we already know. 
+  \item Analyzing when/why patterns break and seeking complexity.
+  \item Staying grounded with ``standard'' examples/calculations. 
+\end{enumerate}
+\tbf{Goal:} I want to show you these ideas in action with examples and stories!  
+\section{Examples/Stories}
+The rest of this lecture will proceed in a ``choose your own adventure'' format:
+For each of the first three \tbf{Core Ideas}, you will get to pick one of the
+two stories to talk about via democracy. Some topics are, by my estimation, a
+little more difficult/inaccessible, so these have been marked with a $\bigstar$. 
+
+\subsection{Connections}
+Both of the following stories/examples revolve around the use of graphs combined
+with algebra in the pursuit of various avenues of study:
+\begin{itemize}
+  \item \textit{How to Tell Spaces Apart (Simplicial Homology)} --
+    We will use graphs as a model for describing various topological spaces
+    (spheres, toruses, Klein bottles) and use an extension of the Euler
+    characteristic with linear algebra to distinguish spaces from each other. 
+  \item ($\bigstar$) \tit{Word Problems (Geometric Group Theory)} -- We
+    will take an alternate view of groups and study graphs induced by a group's
+    structure, and use these graphs to explain why deciding whether an element
+    in a group is the identity element is unsolvable. 
+\end{itemize}
+
+
+%\begin{itemize}
+%  \item Galois theory and correspondences (examples in different contexts
+%    too; covering spaces too?) 
+%\subsubsection{Yet Another Galois Correspondence}
+% this is too hard
+%  \item Euler characteristic connecting to algebraic topology, simplicial homology
+%
+%  \item Lie algebra - group correspondence
+% this is too hard 
+%  \item solving the word problem 
+%\end{itemize}
+
+\noindent \tbf{(Enter break here, informal time for questions)}
+
+\subsection{Generalizations}
+The following two stories describe generalizations of ideas and
+concepts you may have seen before via the formalisms of analysis and geometry:  
+\begin{itemize}
+  \item $(\bigstar)$ \tit{Doing Calculus Anywhere (Manifolds,
+    Differential Forms)} -- One of the staples of calculus is the Fundamental
+    Theorem of Calculus, which has many further generalizations further afield
+    in multivariable calculus. Let's see why these are actually all the same
+    thing! 
+
+  \item \tit{A Case Study in Volume (Measure Theory)} -- So you
+    think you know what volume is? Here we test your intuitive understanding of
+    volume and use edge cases as a case study for generalizing what you might
+    think of as ``volume.'' 
+\end{itemize}
+
+\subsection{Breaking and Repairing}
+These final two stories describe ways in which natural constructions might fail
+to behave as expected, and when possible, how we can make sense of the complexity
+that arises as a result. 
+
+\begin{itemize}
+  \item \tit{I Forgot How to Factor (Algebraic
+    Number Theory)} -- We will try solving some Diophantine equations in some
+    creative ways, and realize that I don't really know how to prime-factorize
+    things anymore. Can we fix that? 
+
+  \item \tit{The Answer Is Not True (Analysis,
+    Foundations)} -- Because everyone loves the true/false section of a math 
+    exam, we're going to have a true/false party!
+
+    Wait, I forgot to take the spoiler out of the section header... fine, to
+    make it more interesting, be prepared to explain your answers!
+\end{itemize}
+
+%\begin{itemize}
+%  \item Unique factorization, algebraic number theory  
+%  \item Bad/pathological examples from topology/analysis
+%\subsubsection{(another game of true/false)}
+%  \item Axiom of choice stuff? What is a feature and what is a bug?  
+%\end{itemize}
+
+\section*{Questions?}
+
+
+\end{document} 
