@@ -2,6 +2,7 @@
 \usepackage{blubird}
 % has options [nodate, nosans, nofancy, nocolor, code]
 
+\usepackage{twemojis}
 % box setup - should be moved to somewhere nicer
 \mdfsetup{
 	roundcorner = 2pt,
@@ -10,6 +11,7 @@
 	innerbottommargin = 1em,
 	frametitlefont = \bfseries,
 }
+\newcommand{\lamb}{\twemoji{sheep}}
 
 % TITLE
 \title{How To Check A Proof With A Computer \\ and the Curry-Howard Correspondence}
@@ -18,23 +20,362 @@
 \begin{document}
 \maketitle
 
-Picture this: you think you have just come up with the proof of the Riemann Hypothesis, or that $\cat P \neq \cat{NP}$, or some other famous long-standing open problem. \textbf{\textit{How do you know the proof you have is correct?}} If the proof is long and/or excessively complicated, it will be difficult for people to check by hand -- as such, what if there were ways for a computer to help or even prove theorems for us?
+% vague statement about computers 
+Computers are being used more and more in mathematics. 
 
-We're going to look at how computers do this and know how to
+Examples of computer-assisted proof: 
+\begin{itemize}
+  \item The four-color theorem, 1976
+  \item Optimal sphere-packing in a box [Kepler conjecture], 1998
+  \item Happy ending problem -- 17 points guarantee a convex hexagon, 2006
+  \item Solving a Rubik's Cube -- ``God's number'' is 20, 2010 
+  \item Minimal number of clues to solve a sudoku puzzle is 17, 2012
+\end{itemize}
 
-Here's a roadmap for
+Computers are also being used to verify the correctness of the proof of a
+theorem. These involve the use of \emph{proof assistants}:
+\begin{itemize}
+  \item The four-color theorem (Coq), 2002
+  \item The CompCert C Compiler (Coq), 2009
+  \item seL4 kernel (Isabelle/HOL), 2010
+  \item The Feit-Thompson theorem, a statement about symstructs of odd
+    size (Coq), 2012
+  \item Peter Scholze and condensed mathematics (Lean), 2021
+  \item Proof of the Polynomial Freiman-Ruzsa conjecture (Lean), by Terence Tao 2023
+\end{itemize}
+These proof assistants can check if a proof is correct and can report an error
+if there's something missing. Many also can help a user get to a formal
+proof via interactive ``partial progress'' features.
 
-\section{Logics and Deduction}
+Question: How does this work? In particular, \textbf{\textit{how does the computer know the proof you have is correct?}} 
 
-\section{Crash Course: Functional Programs}
+We communicate with computers via programming languages, which are based on
+various models of how computation ought to work. 
+To investigate this, we're going to talk about several models of computation
+with increasing complexity, and we'll see how this relates to logic and
+theorem-proving. In particular, we are going to develop a model of computation
+(you can think of it as a toy programming language if you like) that is powerful
+enough to encode proofs and logic. 
 
-\section{Type Checking}
+\begin{remark}
+  There tend to be two major schools of thought when it comes to modelling
+  computing. One of these models is the \emph{Turing machine}, which can be
+  thought of as a state machine with infinite memory, and the other will be the
+  more ``mathematical'' style of thinking about how computations are functions
+  that take in inputs and return outputs (which we'll spend the rest of the time
+  talking about). 
+  The fact that these models are equivalent is called the \emph{Church-Turing thesis}. 
+\end{remark}
+%I learned about this from the (we called him the goat)
+
+\section{Simply Typed \texorpdfstring{\lamb-da}{Lamb-da} Calculus}
+In the spirit of celebrating farm animals of various colors, 
+our first model of computation will be the \emph{simply-typed $\lamb$-da calculus}. 
+
+Expressions (or terms) in the \lamb-da calculus -- variables (identifiers),
+functions (abstraction) which carry types, application, and constants
+\[
+  e ::= x \mid \lamb x:t \to e \mid e_1 \, e_2 \mid c  
+\]
+All expressions/terms are typed, and types come in a few basic forms (we'll add more onto this list later):  
+\[
+ t ::= T \mid t_1 \to t_2 
+\]
+Some basic examples of types: 
+\[
+  \ttt{bool} ::= \ttt{true} \mid \ttt{false} \qquad \ttt{unit} ::= *
+\]
+Types are hard to define formally -- you can kind of thinking them as
+designating what collection an expression belongs to. 
+``a marker that indicates the quality of the expression'' is not bad... 
+
+Some examples: 
+\begin{itemize}
+  \item $\lamb x:t \to x$ for any type $t$ -- identity function 
+  \item $\lamb x:t_1 \to \lamb y:t_2 \to x$ -- constant function
+  \item $\lamb x \, y \to x$ -- constant function
+  \item $\lamb x \, y \to x \, y$ -- evaluation function
+  \item $\lamb x \, y \, z \to x \, z \, (y \, z)$ -- substitution
+  \item $\lamb x \, y \, z \to (y \, z) \, (x \, z)$ -- contradiction 
+  \item $\lamb x \, y \, z \to y \, (x \, z)$ -- contrapositive
+\end{itemize}
+Often, we can (and will) leave off the type annotations and return types of
+these functions if it can be inferred from context. As an exercise, 
+what are the types of these functions? 
+
+As you can see, our language is a little boring, and we are fairly limited in
+what we can do. Notably, we don't have a way to say things about numbers? I thought we
+were doing math, we should have numbers, right?
+\begin{remark}
+  Technically, we can define numbers with what we have, but it's actually mildly
+  complicated and what follows is better anyways, so we won't do this.
+\end{remark} 
+
+What if we added more power?
+
+\section{Let's Talk About Types (Calculus of Inductive Constructions)}
+% note to self 
+% - calculus of constructions technically is just the introduction of the
+% - dependent type 
+% calculus of constructions differs via the addition of 
+% constructors, which make life easier... technically, all of this can 
+% be done without them, but it's just harder to follow/understand 
+
+Types are also allowed to be defined \emph{inductively}. I haven't
+actually introduced numbers into our language, and ideally we'd like to
+prove things about numbers! This we can do with the help of \emph{constructors}.
+
+Let's introduce the type of the natural numbers: 
+\begin{center}
+\begin{tabular}{l}
+  \ttt{inductive} $\NN$ \\
+  | $O$ : $\NN$ \\
+  | $S$ : $\NN \to \NN$
+\end{tabular}  
+\end{center}
+Here $O$ represents zero, and $S$ represents the ``successor'' function, from
+which we can get the numbers after zero. i.e. $S O$ is the representation of
+one. $O$ and $S$ are called the \emph{constructors} $O$ and $S$ of the type
+$\NN$. (In certain contexts, these are sometimes called \emph{formation
+rules}.)  
+
+Why is this type called ``inductive?'' 
+The ``inductive'' nature of this type refers to the fact that all terms of
+type $\NN$ are exactly the ones that can be constructed from $O$ and $S$, which
+is the key idea behind in the induction principle on the natural numbers in
+general. Recall that the induction principle tells us how to prove a statement
+for all natural numbers simply by specifying the base case (the zero case) and
+by showing the inductive case (the successor case). 
+In general, all inductive types come with an \emph{induction principle}, which
+tells us how to construct dependent functions on that type based on the
+constructors. 
+
+As an example, we can inductively define a function on the natural numbers as
+follows:  
+\begin{center}
+  \begin{tabular}{l}
+    \ttt{is\_zero} : $\NN \to \ttt{bool}$ \\
+    \ttt{is\_zero}($O$) := \ttt{true} \\
+    \ttt{is\_zero}($S \, \_$) := \ttt{false} \\
+  \end{tabular}
+\end{center}
+
+
+\begin{remark}
+  Similarly, it's possible to build the integers $(\ZZ)$ and the rationals
+  $(\QQ)$, and prove things about them. Doing this for the reals $(\RR)$ is
+  harder... and it actually can be quite complicated! 
+\end{remark}
+
+This is good, and we can do a lot with inductive types -- but it's not quite
+enough to do what we want. 
+
+What if we added more power? 
+
+Now, we will blur the distinction between terms and types. The only distinction
+is syntactic -- whether it appears as the annotation to a term or not. As such,
+we can actually combine our rules for generating terms and types into one, and
+we'll add a couple new ones: 
+\[
+t ::= x \mid T \mid \lamb x :t_1 \to t_2 \mid t_1 \, t_2 \mid \TT 
+%\mid \TT_i, i \in \ZZ^+
+\]
+What did we gain? What did we lose?
+\begin{itemize}
+  \item We now get \emph{dependent function types} -- in the pattern $\lamb x : t_1 \to
+    t_2$, if this appears as a type, then we have a type where the second
+    type, $t_2$, depends on $x$ of type $t_1$!  
+  \item We did not lose the type $t_1 \to t_2$ -- this is like saying $\lamb \_
+    : t_1 \to t_2$, where $t_2$ doesn't depend on $x$. 
+  \item This also implicitly means we need the type of types as well -- if $x$
+    in $\lamb x : t_1 \to t_2$ is a type, then $t_1$ had better be a type of
+    types. This we call $\TT$, sometimes also $\PP$ or $\ttt{Prop}$. Types of types are called
+    \emph{sorts}. 
+
+%  \item What's the type of $\TT$? It's actually not consistent to allow $\TT :
+%    \TT$ (the argument of this
+%    is similar to ``the barber who shaves everyone who doesn't shave
+%    themselves'', i.e. Bertrand's paradox -- here, we have \emph{Girard's
+%    paradox}). In fact, we actually
+%    need $\TT : \TT_1$, and then $\TT_1 : \TT_2$, etc. The $\TT_i$s are called
+%    \emph{type universes} and this is more of a technical point than anything
+%    super consequential.  
+\end{itemize}
+
+
+These are all of the features we need -- dependent typing and inductive types. 
+%We can also define types that look like propositions on the natural numbers! As
+%an example, let's think about the $\leq$ relation: 
+%\begin{center}
+%  \begin{tabular}{l}
+%    \ttt{inductive} $\leq$ : 
+%  \end{tabular}
+%\end{center}
+
+% more digression 
+\begin{remark}
+Before, we could only really have terms that depended on terms (like functions).
+Now, because of this blurred distinction between terms and types, it seems like
+we can have types 
+that depend on terms, terms that depend on types, and types that depend on other
+types. However, at this stage it's important to only think of ``terms'' and
+``types'' as a semantic distinction -- meaning that a given expression can play
+the role of a term or a type depending on the context -- but syntactically these
+ideas are indistinguishable.
+\begin{itemize}
+  \item Terms depend on terms -- $\lamb x : t \to e$, where the term $e$ depends
+    on $x$. 
+  \item Types that depend on types -- These are type constructors, such as list,
+    or any of the inductive types below
+  \item Terms that depend on types -- These are polymorphic terms, such as the
+    identity function. 
+  \item Types that depend on terms --  These are so-called dependent types that
+    most languages do not have.
+\end{itemize}  
+\end{remark}
+
+As an example, consider the following inductive type: 
+\begin{center}
+  \begin{tabular}{l}
+    \ttt{inductive vector} : $\TT \to \NN \to \TT$ \\
+    | \ttt{empty} : $\lamb X : \TT \to \ttt{vector } X \, O$ \\ 
+    | \ttt{item} : $\lamb X : \TT \to \lamb h : X \to \lamb n : \NN \to \lamb t
+    : \ttt{vector } X \, n \to \ttt{vector } X \, (S \, n)$ 
+  \end{tabular}
+\end{center}
+This encodes a list of items of the first type of a specified length. 
+Here, the second argument of type $\NN$ encodes the length of the vector, which
+grows as we apply the \ttt{item} constructor. 
+
+Here are some more important inductive types. These are dependent types that
+depend on given input types.   
+\begin{center}
+  \begin{tabular}{l}
+    \ttt{inductive combine} : $\lamb \alpha : \TT \to \lamb \beta : \TT \to \TT$ \\ 
+    | \ttt{pair} : $\alpha \to \beta \to \ttt{combine}$ $\alpha$ $\beta$ 
+\end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{l}
+    \ttt{inductive choose} : $\lamb \alpha : \TT \to \lamb \beta : \TT \to \TT$ \\ 
+    | \ttt{first} : $\alpha \to \ttt{choose}$ $\alpha$ $\beta$ \\ 
+    | \ttt{second} : $\beta \to \ttt{choose}$ $\alpha$ $\beta$ 
+\end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{l}
+    \ttt{inductive watcher} : $\lamb \alpha : \TT \to \lamb P : (\alpha \to \TT) \to \TT$ \\ 
+  | \ttt{view} : $\lamb (\alpha : \TT) \to \lamb (x : \alpha) \to (P \, x) \to
+  \ttt{watcher}$ $\alpha$ $P$   
+  \end{tabular}
+\end{center}
+
+We can also have an inductive type with no constructors: 
+\begin{center}
+  \ttt{inductive none} : $\TT$ 
+\end{center}
+
+Up until this point, we've only spent time constructing a ``programming
+language'' -- this extended $\lamb$-da calculus with dependent and inductive
+types. Why is this enough to encode logic and theorem proving?  
+
+\section{Revisiting Logic}
+% BHK intepretation
+We've already started to touch on this a little, but let's pivot to talking
+about logic and proof now from a computational perspective. The start of this
+relationship begins with the idea that
+that if we know a proposition to be true, then we should have a proof of it.  
+Suppose we have propositions $P$ and $Q$, and we have corresponding proofs $p$
+and $q$. 
+
+\begin{itemize}
+  \item What would a proof of $P \wedge Q$ look like? A pair of proofs $(p, q)$. 
+  \item What would a proof of $P \vee Q$ look like? A proof tagged with which
+    proposition it's a proof of -- i.e. $(0, p)$ if we had a proof of $P$ or
+    $(1, q)$ if we had a proof of $Q$.
+  \item What would a proof of $P \to Q$ look like? Given a proof of $P$, $p$, we
+    need to turn it into a proof of $Q$. Such a proof requires a function from
+    proofs of $P$ to proofs of $Q$. 
+  \item What would proofs of true and false look like? There is a proof of true,
+    there shouldn't be any proofs of false. 
+  \item What would a proof of $\neg P$ look like? If we had a proof of $P$, we
+    should be able to get a contradiction, i.e. a proof of false. This is also
+    best described by a function turning a proof of $P$ into a proof of false. 
+\end{itemize}
+
+What about first-order logic statements? Suppose $A$ is a set, $x \in A$, and
+we have some proposition $P$ depending on $x$. 
+\begin{itemize}
+  \item What does a proof of $\forall x \in A, P(x)$ look like? We need a function
+    that turns $x$ into a proof of $P$, but $P$ is now dependent on $x$. This is
+    kind of like dependent typing, isn't it? 
+  \item Whad does a proof of $\exists x \in A, P(x)$ look like? We need a pair
+    of a element $x \in A$ and a proof of $P(x)$. This again requires some kind
+    of dependent typing, since $P$ is not necessarily provable over all elements
+    in $A$, but there should be a proof of $P$ given a specific $x \in A$. 
+\end{itemize}
+With this in mind, we are ready to state the \emph{Curry-Howard correspondence}
+between logic and programming languages that enables us to encode logic within a
+programming language. 
 
 \section{The Correspondence}
-\subsection{Types are Propositions}
+\begin{center}
+  \emph{Types correspond to propositions, and expressions in our language
+    carrying those types
+  correspond to proofs of those propositions.}
+\end{center}
 
-\subsection{Programs are Proofs}
+\begin{center}
+  \begin{tabular}{c|c}
+    Types & Propositions \\ \hline
+    \ttt{combine} $\alpha$ $\beta$ & $P \wedge Q$ \\  
+    \ttt{choose} $\alpha$ $\beta$ & $P \vee Q$ \\  
+    $\alpha \to \beta$ & $P \to Q$ \\ 
+    \ttt{unit} & $\top$ \\
+  \ttt{none} & $\bot$ \\
+  $\lamb x : s \to t$ & $\forall x \in A$, $B(x)$ \\ 
+  \ttt{watcher} $\alpha$ $P$ & $\exists x \in A$, $B(x)$
+  \end{tabular}
+\end{center}
 
+Note that the terms that carry these types on the left also correspond exactly to the kinds of
+data required to prove the proposition on the right. For example, $\ttt{pair} \,
+a \, b : \ttt{combine} \, \alpha \, \beta$ would carry the exact information
+required to prove a conjunction of two propositions, etc. 
+
+Therefore, to check the correctness of a proof of a given theorem, one would
+just have to convert the theorem into a type, the proof into an expression, and
+then check if that expression has the intended type. 
+As such, a proof assistant is just \emph{an extra-fancy type-checker}. If you're
+familiar with computer programming, this is super interesting -- lots of
+languages have typing rules and type-checking, and so the basic functionality of
+a proof assistant is present in many places. 
+
+\section{Applications}
+This allows for the application of this idea to check the correctness of
+software. If one is writing a function with certain specifications, one can
+formally state the function and specifications in our language, and check that
+the function satisfies the specifications by constructing ``proof terms'' that
+say that the fucntion has the type of the specification.  
+
+In general, constructing proof terms from scratch can be difficult. Agda forces
+you to essentially construct proof terms yourself, but it tells you the type
+that the missing term needs to have in order to be a valid proof/type-check
+correctly. Other assistants such as
+Coq and Lean have \emph{tactics} where the computer tells you goals to fulfill
+and constructs the proof terms under the hood. 
+
+\section{Demo - Proving a Theorem in Lean}
+
+
+\section{Are You Interested?}
+\begin{itemize}
+  \item Join the Lean community and play the Natural Number Game! 
+  \item Homotopy type theory, category theory, and Agda $\to$ univalent
+    mathematics
+\end{itemize}
 
 
 \end{document}

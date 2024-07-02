@@ -1,0 +1,327 @@
+\documentclass[12pt]{article}
+\usepackage{blubird}
+% has options [nodate, nosans, nofancy, nocolor, code]
+
+% TITLE
+\title{How to Represent a Permutation \\ \small{and why i drew boxes all summer}}
+\author{Bryan Lu}
+\date{7 November 2023} % do not use if [nodate] option enabled
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  Representation theory describes a broad strategy of analyzing
+  algebraic structures by understanding how they act on vector spaces. This allows
+  us to employ the tools of linear algebra to make studying abstract algebraic
+  objects more tractible. We will
+  look at some basic tools in representation theory as applied to the symmetric
+  group, and talk about connections to combinatorics. (Time-permitting, we may also
+  look at applications of the theory to current research in
+  algebraic combinatorics!)
+\end{abstract}
+
+pretext: 
+\begin{itemize}
+  \item ask: how much familiarity with linear algebra? today all of our vector
+    spaces will be \emph{complex} (algebraically closed, characteristic zero)  
+  \item ask: group theory? 
+\end{itemize}
+
+\section{Context}
+\begin{itemize}
+  \item what is a representation? why study representation theory?
+  \item philosophy: studying the structure of objects by studying how they act
+    on other things
+  \item touches algebra (naturally), but also geometry and combinatorics
+  \item acting on vector spaces is nice! in particular, we know how to study
+    linear transformations on vector spaces (just matrices and linear algebra)
+\end{itemize}
+
+
+\section{Basics}
+\begin{definition*}
+  A (finite-dimensional) \emph{representation} of a group $G$ is: 
+\begin{itemize}
+  \item a group homomorphism $\rho : G \to \GL_n(\CC)$.  
+  \item a $\CC[G]$-module $M$. (abelian group with action of $\CC[G]$, much like
+    a generalization of a vector space.)
+
+    $\CC[G]$
+    can be thought of the set of formal complex linear combinations of $G$,
+    and you can think of this as a function $f : G \to \CC$, where a
+    linear combination corresponds to ``$\sum_{g \in G} f(g) g$''. 
+\end{itemize}
+\end{definition*}
+
+\begin{example*}
+  Consider the dihedral group $D_3$ acting on the plane via rotations and
+  reflections (can view it as $\RR^2$ inside $\CC^2$, really):
+  \[
+    D_3 = \tuple{r, s \mid r^3 = s^2 = 1}
+  \]
+  \[
+    r = \bmat{-\frac{1}{2} & -\frac{\sqrt 3}{2} \\ \frac{\sqrt 3}{2} &
+    -\frac{1}{2}} \qquad s = \bmat{1 & 0 \\ 0 & -1}
+  \] 
+\end{example*}
+
+\begin{example*}
+  Look at all one-dimensional representations of $D_3$. 
+
+  The trivial representation of $D_3$ -- everything acts as identity! 
+  Also, thinking of $D_3 = S_3$, the sign representation 
+
+  Also, the standard representation in matrices (embed this as acting on a space with
+  3 basis vectors)
+\end{example*}
+
+\begin{example*}
+  The regular representation of any finite group $G$ -- one basis element for
+  every element in the group. 
+\end{example*}
+
+\begin{definition*}
+  A \emph{subrepresentation} of a representation:
+  \begin{itemize}
+    \item $\rho : G \to \GL_n(\CC)$ is a subspace $W \subseteq \CC^n$ preserved
+      by $\rho(g)$ for all $g \in G$.
+    \item $M$ is a submodule of $M$. 
+\end{itemize}  
+\end{definition*}
+
+\begin{definition*}
+  A representation is \emph{irreducible} if there are no proper
+  subrepresentations (i.e. if $\rho$ is a representation of $G$, then $\rho(g)$
+  has no nontrivial invariant subspaces across all $g$, and if $M$ is a representation of $G$, it is a simple
+  $\CC[G]$-module.) 
+\end{definition*}
+
+Very important theorems:
+\begin{theorem*}[Schur's Lemma]
+  Any intertwining map of irreducible representations is either the zero map (if
+  these representations are not isomorphic) or a scalar multiple of the identity.
+  $f : V \to W$, $\rho_V$, $\rho_W$ reps, for any $g \in G$, $f \circ \rho_V(g)
+  = \rho_W(g) \circ f$. 
+
+  \noindent\textbf{NOT true if the field is not algebraically closed!}
+\end{theorem*}
+
+\begin{theorem*}[Maschke's Theorem (+ Schur's Lemma)]
+  Any representation of $G$ over $\CC$ has a (unique) decomposition into a
+  direct sum of irreducibles. 
+
+  \noindent\textbf{NOT true in fields with positive characteristic (or
+  algebraically closed!)}
+\end{theorem*}
+
+\section{Characters}
+\begin{definition*}
+  For $G$ a group and $\rho : G \to \GL(V)$ a representation of a group $G$ on
+  $V$, the \emph{character} of $\rho$ is the function $\chi_\rho : G \to \CC$
+  given by $\chi(g) = \tr(\rho(g))$.  
+\end{definition*} 
+The theory of characters is very rich! skipping over a lot of proofs.
+
+Let $\rho$ be a representation of $G$ over $\CC^n$, and $\chi$ the associated
+character. Some facts about characters: 
+\begin{itemize}
+  \item $\chi(1) = n$, the dimension of the ambient space
+  \item $\chi(g^{-1}) = \ol{\chi(g)}$
+  \item for another representation $\sigma$, $\chi_\rho + \chi_\sigma =
+    \chi_{\rho \oplus \sigma}$, and $\chi_\rho \cdot \chi_{\sigma} =
+    \chi_{\rho\otimes \sigma}$. 
+  \item $\chi$ is constant on conjugacy classes
+\end{itemize}
+
+\begin{definition*}
+  The \emph{character table} of a group $G$ is a square table with the rows
+  being irreducible representations of $G$ and the columns the conjugacy classes
+  of $G$, and each entry the value of that irrep on that conjugacy class.  
+\end{definition*}
+
+\begin{example}
+Symmetric group $D_3 = S_3$ and $S_4$:  
+\begin{center}
+\begin{tabular}{c|ccc}
+    $S_3$ & (1) & (12) & (123) \\ \hline 
+    trivial, (3) & 1 & 1 & 1 \\ 
+    sign, (1,1,1) & 1 & -1 & 1 \\ 
+    standard, (2,1) & 2 & 0 & -1 \\ 
+  \end{tabular}
+\end{center}  
+\end{example}
+
+
+\begin{definition*}
+  A \emph{class function} on $G$ is a complex-valued function on $G$ which is
+  constant on conjugacy classes. Note that characters are class functions, and
+  inside the group ring (thought of as functions), these commute with all
+  elements under multiplication.  
+\end{definition*}
+
+Following from Schur's Lemma, irreducible characters are very very special: 
+\begin{theorem*}
+  The set of class functions on $G$ forms a complex vector space, on which we
+  can define the following Hermitian inner product:
+  \[
+    \ip \vphi \psi = \frac{1}{|G|} \sum_{g \in G} \ol{\vphi(g)} \psi(g). 
+  \] 
+  Irreducible characters form an orthonormal basis for this vector space. 
+  In particular, if $\rho_i, \rho_j$ are irreps of $G$, and $\chi_i$ and $\chi_j$
+  are the associated irreducible characters, then 
+  \[
+    \ip {\chi_i}{\chi_j} = \begin{cases}
+      1 & \rho_i \iso \rho_j \\ 0 & \rho_i \not\iso \rho_j
+    \end{cases}
+  \]
+  (check this by example)
+\end{theorem*}
+
+\begin{corollary*}
+  $\rho$ is irreducible iff $\ip \chi \chi = 1$. 
+\end{corollary*}
+
+\begin{corollary*}
+  The number of irreps of $G$ is equal to the number of conjugacy classes of
+  $G$. 
+\end{corollary*}
+
+\begin{corollary*}
+  Isomorphic representations have the same character.
+\end{corollary*}
+
+\begin{corollary*}
+  The columns of the character table are orthogonal under the standard inner
+  product. Precisely, if $s$ and $t$ are in different conjugacy classes, then
+  $\sum_{i=1}^r \chi_i(s) \ol{\chi_i(t)} = 0$, where this sum goes over all
+  irreps.  
+\end{corollary*}
+
+\begin{example*}
+  Character of the regular representation can be computed -- $\chi_G(1) = |G|$,
+  and $\chi_G(g) = 0$ for $g \neq 1 \in G$.
+
+  Projecting this in terms of the irreducibles $\chi_i$, we have that 
+  \[
+    \ip {\chi_i}{\chi_G} = \frac{1}{|G|} \ol{\chi_G(1)} \chi_i(1) = n_i
+  \] 
+  where $n_i$ is the dimension of the irrep. Therefore, $\chi_G = \sum_{i=1}^r
+  n_i \chi_i$ as we sum over all irreps, and by dimension counting we have that
+  $|G| = \sum_{i=1}^r n_i^2$. 
+\end{example*}
+
+Let's use this information to figure out all of the irreps of $S_4$ by their
+characters.
+\begin{itemize}
+  \item Take trivial and sign representation 
+  \item look at the standard representation, it's not irreducible but getting
+    rid of $e_1 + e_2 + e_3 + e_4$, it then becomes so! (trivial rep)
+  \item take the tensor product of this with the sign rep
+  \item Work out the last irrep from dimension counting and then orthogonality 
+    (by columns is easiest) 
+\end{itemize}
+
+\begin{center}
+  \begin{tabular}{r|ccccc}
+    $S_4$ & (1) & (12) & (12)(34) & (123) & (1234) \\ \hline
+    trivial (4) & 1 & 1 & 1 & 1 & 1 \\ 
+    sign (1, 1, 1, 1) & 1 & -1 & 1 & 1 & -1 \\ 
+    standard (3, 1) & 3 & 1 & -1 & 0 & -1 \\ 
+    dual standard (2, 1, 1) & 3 & -1 & -1 & 0 & 1 \\ 
+    last (2, 2) & 2 & 0 & 2 & -1 & 0
+  \end{tabular}
+\end{center}
+
+\section{Specht Modules} 
+Note that a permutation $\sigma \in S_n$ can be decomposed into a product of
+cycles, and the conjugacy classes of $S_n$ are indexed by partitions of $n$
+(into cycles). Therefore, the irreducible representations are also in bijection
+with the partitions of $n$ -- and in particular, we can construct them for every
+partition of $n$ explicitly!
+
+Fix your favorite partition $\lambda \vdash n$. Draw as a Young diagram.  
+\begin{itemize}
+  \item Look at every \emph{standard Young tableau} of shape $\lambda$. Put the
+    numbers 1-$n$ in boxes of $\lambda$, increasing down and across. 
+  \item Consider the \emph{tabloid} for every SYT $t$ of shape $\lambda$ (giving
+    a tabloid $\set t$, where we take equivalence classes of rows. 
+  \item For every permutation $\sigma$ of the numbers that preserves the columns
+    of $t$, apply $\sigma$ to $\set t$ and keep a running sum of
+    $\sgn(\sigma)\set{\sigma \cdot t}$. This gives the \emph{associated
+    polytabloid} for $t$.  
+\end{itemize}
+The complex vector space spanned by these associated polytabloids is called the
+\emph{Specht module} corresponding to $\lambda$. 
+
+\begin{example*}
+  $\lambda = (2, 2)$.
+\end{example*}
+
+
+\section{Symmetric Functions}
+\begin{definition*}
+  A \emph{symmetric function} $f$ in $n$ variables $x_1, \dots, x_n$ is a
+  polynomial in those variables such that for any permutation $\sigma \in S_n$,
+  $f(x_1, \dots, x_n) = f(x_{\sigma(1)}, \dots, x_{\sigma(n)})$. 
+\end{definition*}
+Several families: 
+\[
+  p_k = \sum_{i=1}^n x_i^k
+\] 
+\[
+  h_k = \sum_{l_1 + \dots l_n = k, l_i \geq 0} x_1^{l_1} \dots x_n^{l_n}
+\]
+Special: \emph{Schur polynomials}, a positive basis for products of symmetric
+functions.  
+\[
+  s_\lambda = \sum_{T \in SSYT(\lambda)} x_T, \qquad x_T = \prod_{i \in T} x_i
+\] 
+
+\begin{definition*}
+  For any class function on $S_n$, $f$, define $\mathrm{ch}(f) = \frac{1}{n!}
+  \sum_{\sigma \in S_n} f(\sigma) p_{c(\sigma)}$ , where $c(\sigma)$ is the
+  partition that $\sigma$ defines (its cycle type) and $p_\lambda =
+  p_{\lambda_1} \dots p_{\lambda_k}$ 
+\end{definition*}
+
+\begin{theorem*}
+  The map $\mathrm{ch}$ from the ring of class functions of $S_n$ to the
+  symmetric functions is an isomorphism.  
+\end{theorem*}
+Manipulating representations of $S_n$ is as easy as manipulating polynomials!
+
+\section{Why?}
+In algebraic combinatorics, it's not uncommon to study rings associated to
+certain combinatorial structures, which might admit a natural group action. (For
+instance, the Stanley-Reisner ring associated to a simplicial complex). One
+example that I care a lot about, a quotient of the Stanley-Reisner ring of the
+order complex of the Boolean lattice: 
+\[
+  k[\Delta B_n] = \frac{k[x_F : F \in B_n]}{\tuple{x_P x_Q : P, Q \text{
+  incomparable}}}
+\] 
+\[
+  C(B_n) := \frac{k[\Delta B_n]}{\tuple{\Theta_{colorful}}}, \Theta_{colorful} =
+  \set{ \sum_{|F| = i} x_F, 0 \leq k \leq n}
+\] 
+When $k = \CC$ (we usually want it to be a field) each graded component is a
+vector space, admitting an $S_n$-action $\sigma \cdot x_F = x_{\sigma(F)}$. This
+then makes each graded component an $S_n$-representation!
+
+Different graded components of this family of rings are related to each other by
+restricting representations of $S_n$ to the subgroup $S_{n-1}$. In the course of
+figuring this out we see that: 
+\begin{theorem}[DHKLT 2023]
+For $\lambda / \mu$ a ribbon tableau with $n$ boxes, 
+\[
+  s_{\lambda / \mu}\downarrow^{S_n}_{S_{n-1}} = \text{you know what it is} 
+\] 
+\end{theorem}
+
+
+
+
+
+
+\end{document} 

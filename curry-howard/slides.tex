@@ -1,0 +1,571 @@
+\documentclass{beamer}
+\usetheme{Blubird}
+
+%%%%%%%%%%%%%%%%%%%%%
+\usepackage{twemojis}
+\newcommand{\lamb}{\texttwemoji{sheep}}
+
+\title{Checking Proofs with Computers}
+\subtitle{and the Curry-Howard Correspondence}
+\author{Bryan Lu}
+\date{July 9, 2024}
+
+  \setcounter{showSlideNumbers}{1}
+
+\begin{document}  
+
+	\setcounter{showProgressBar}{0}
+	\setcounter{showSlideNumbers}{0}
+
+\frame{\titlepage}
+
+\begin{frame}{A Little About Me}
+  \begin{minipage}{0.6\textwidth}
+  \begin{itemize}
+    \item HCSSiM 2019 alum
+      \begin{itemize}
+        \item PJ writer/editor
+        \item (former) Frisbee extraordinaire
+      \end{itemize}
+    \item Graduate Student in Math @ University of Washington
+      \begin{itemize}
+        \item BA Math/Computer Science from Cornell University 
+      \end{itemize}
+    \item Combinatorics! \texttwemoji{blue heart}
+    \only<2>{\begin{itemize} 
+      \item had a formal verification phase 
+  \end{itemize}}
+  \end{itemize}  
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{profile-pic.png} 
+  \end{minipage}
+\end{frame}
+
+\section{Context}
+
+  \setcounter{framenumber}{0}
+	\setcounter{showProgressBar}{1}
+	\setcounter{showSlideNumbers}{1}
+
+
+\begin{frame}{Computers in Math}
+  Computer programs help solve problems: 
+  \begin{itemize}
+    \item The four-color theorem (1976)
+    \item Optimal sphere-packing (1998)
+    \pause\item ``Happy ending problem'' for hexagon -- 17 points (2006)
+    \item Solving any Rubik's Cube -- 20 moves (2010)
+    \item Minimum number of clues in sudoku -- 17 (2012)
+  \end{itemize} 
+\end{frame}
+
+
+\begin{frame}{Proofs Verified by Computers}
+ \small{Proofs/programs checked by \emph{proof assistants}:} 
+ \begin{itemize}
+   \item The four-color theorem (Coq, 2002) 
+   \item The CompCert C Compiler (Coq, 2009)
+   \item seL4 kernel (Isabelle/HOL, 2010)
+   \item The Feit-Thompson theorem about groups of odd
+     size (Coq, 2012) \pause 
+   \item Peter Scholze, condensed mathematics (Lean, 2021)
+   \item Terence Tao, the Polynomial Freiman-Ruzsa conjecture (Lean, 2023)
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{\includegraphics[width=26pt]{yellowPig.png}}
+  \begin{center}
+    \Huge{\textit{How does the computer know a proof is correct?}}
+
+    \Huge{\texttwemoji{desktop computer} $\rightleftharpoons$
+    \texttwemoji{thinking}}
+
+  \end{center}
+\end{frame}
+
+
+\section{Simply-Typed \texorpdfstring{\lamb}{lamb}-da Calculus}
+
+\begin{frame}{Syntax}
+Terms in the simply-typed $\lamb$-da calculus:
+\[
+  e ::= c \mid x \mid \lamb(x:t) \to e \mid e_1 \, e_2 
+\] 
+
+All terms have types:
+\[
+  t ::= T \mid t_1 \to t_2
+\]
+\pause
+Some basic examples of types: 
+\[
+  T = \set{\ttt{bool}, \ttt{unit}, \dots}
+\] 
+\[
+\ttt{bool} ::= \ttt{true} \mid \ttt{false} \qquad \ttt{unit} ::= *
+\] 
+
+
+\end{frame}
+
+
+\begin{frame}{Examples: Functions}
+  \begin{example}
+ \begin{itemize}
+   \item $e_1 = \lamb(x:t) \to x \, : \only<1>{\,\; ???} \pause \, t \to t$ \hfill identity function 
+    \begin{itemize}
+      \item $e_1 \; \ttt{true} = (\lamb (x : t) \to x) \; \ttt{true} = \ttt{true}$  
+    \end{itemize}
+   \pause \item $e_2 = $ \only<3>{$\lamb(x:t_1) \to \lamb(y:t_2) \to x$}
+   \pause {$\lamb (x \; y) \to x \, : \only<4>{\,\; ???} \pause  \, \only<5>{t_1 \to (t_2
+   \to t_1)} \pause t_1 \to t_2 \to t_1 $} \hfill constant function
+   \begin{itemize}
+     \item NOT the same as $(t_1 \to t_2) \to t_1$!
+   \end{itemize}
+  \pause 
+\item $e_3 = \lamb (x \; y) \to x \; y \, : \only<7>{\,\; ???} \pause \, (t_1 \to t_2) \to t_1 \to
+     t_2$ \hfill \footnotesize{evaluation function}
+     \begin{itemize}
+       \item $e_3 \; e_1 \; * = e_1 \; * = *$
+     \end{itemize}
+ \end{itemize}
+    
+  \end{example} 
+  
+\end{frame}
+
+\begin{frame}{Exercise}
+  \emph{What is the type of the following term?}
+\[
+  e_4 = \lamb(x \; y \; z) \to x \; z \; (y \; z)
+\] 
+\pause
+\begin{itemize}
+  \item Suppose $x : \alpha$, $y : \beta$, $z : \gamma$. \pause
+  \item $y$ is a function with one argument of type $\gamma$, so $\beta = \gamma
+    \to \delta$. 
+  \item $x$ is a function with one argument of type $\gamma$ followed by an argument
+    of type $\beta \; \delta = (\gamma \to \delta) \; \gamma = \delta$.
+    \begin{itemize}
+      \item Therefore $\alpha = \gamma \to \delta \to \epsilon$. 
+    \end{itemize} \pause
+  \item $e_4 : (\gamma \to \delta \to \epsilon) \to (\gamma \to \delta) \to
+    \gamma \to \epsilon$. 
+\end{itemize}
+%\begin{itemize}
+%   \item $\lamb x \, y \, z \to x \, z \, (y \, z)$ -- substitution
+%   \item $\lamb x \, y \, z \to (y \, z) \, (x \, z)$ -- contradiction
+%   \item $\lamb x \, y \, z \to y \, (x \, z)$ -- contrapositive 
+%\end{itemize}
+\end{frame}
+
+\begin{frame}{\includegraphics[width=20pt]{yellowPig.png}\texttwemoji{mag_right}}
+ \begin{center}
+   \includegraphics[width=0.55\textwidth]{more_power.png} 
+ \end{center} 
+\end{frame}
+
+\section{Let's Talk About Types!}
+
+\begin{frame}{The Natural Numbers}
+  Introducing $\NN$ with \emph{inductive types}: 
+\begin{center}
+\begin{tabular}{l}
+  \ttt{inductive} $\NN$ \\
+  | $O$ : $\NN$ \\
+  | $S$ : $\NN \to \NN$
+\end{tabular}
+\end{center}
+$O$ and $S$ are called \emph{constructors} (also \emph{introduction rules}).  \pause
+\vspace{12pt}
+
+\emph{How do these constructors allow us to model $\set{0, 1, 2, \dots}$?} \pause 
+\begin{center}
+  \begin{tabular}{l}
+$O \sim 0 \in \NN$ \qquad $S \sim \text{succ} : \NN \to \NN$ \\ \pause 
+$S \; O \sim \text{succ}(0) = 1 \in \NN$ \\ \pause 
+$S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
+\pause 
+\vdots
+  \end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}{Induction Principles}
+
+  \emph{Induction principles} (\emph{elimination rules}) allow you to define
+  functions on inductive types.  
+ \begin{example}
+   The induction principle of $\NN$ requires us to specify values for the ``base case'' and
+   ``inductive step.''\pause
+  \vspace{12pt}
+   \begin{minipage}{0.45\textwidth}
+   \begin{tabular}{l}
+     \ttt{is\_zero} \, : \, $\NN \to \ttt{bool}$ =\\
+     \ttt{ }$\lamb(x : \NN) \to$ \ttt{match}  $x$  \ttt{with} \\
+     \ttt{  }| $O \Rightarrow \ttt{true}$ \\
+     \ttt{  }| $S \; k \Rightarrow \ttt{false}$ 
+   \end{tabular}  
+   \end{minipage}\pause
+   \begin{minipage}{0.45\textwidth}
+   \begin{tabular}{l}
+     \ttt{add} \, : \, $\NN \to \NN \to \NN$ =\\
+     \ttt{ }$\lamb(x \; y) \to$ \ttt{match}  $y$  \ttt{with} \\
+     \ttt{  }| $O \to x$ \\
+     \ttt{  }| $S \; k \to S \; (\ttt{add} \; x \; k)$ 
+   \end{tabular}  
+   \end{minipage}
+ \end{example} 
+\end{frame}
+
+\begin{frame}{Data Structures}
+  Inductive types allow us to model lists of numbers:
+  \begin{center}
+    \begin{tabular}{l}
+        \ttt{inductive natlist}  \\ 
+        | \ttt{nil} : \ttt{natlist} \\
+        | \ttt{cons} : $\lamb (a : \NN) \to \lamb (t : \ttt{natlist}) \to \ttt{natlist}$ 
+    \end{tabular}
+  \end{center}\pause
+\begin{example} \pause
+  \begin{tabular}{rl}
+    \ttt{nil} &$\sim$ \quad [ ] \\ \pause 
+    \ttt{cons} \, (S O) \, \ttt{nil} &$\sim$ \quad [1] \\ \pause
+    \ttt{cons} \, O \, (\ttt{cons} \, (S O) \, \ttt{nil}) &$\sim$ \quad [0, 1] \\
+    \pause
+                                                             &\vdots
+  \end{tabular}
+\end{example}
+\end{frame}
+
+\begin{frame}{\includegraphics[width=20pt]{yellowPig.png}\texttwemoji{mag_right}}
+ \begin{center}
+   \includegraphics[width=0.55\textwidth]{more_power.png} 
+ \end{center} 
+\end{frame}
+
+\begin{frame}{Combined Syntax}
+  Combine rules for making terms vs. types into one rule: 
+  \[
+  t ::= x \mid T \mid \lamb (x :t_1) \to t_2 \mid t_1 \, t_2 \mid \TT
+  \] 
+  What's changed? \pause 
+  \begin{itemize}
+    \item Dependent function types
+      \begin{itemize}
+        \item Functions whose type is $\lamb (x : t_1) \to t_2$, where $t_2$
+          may contain $x$
+        \item ``$t_1 \to t_2$'' $= \lamb (\_ : t_1) \to t_2$ ($t_2$ doesn't
+          depend on $x$)
+      \end{itemize}
+    \item Introducing of the \emph{sort} $\TT$, the ``type'' of types
+      \begin{itemize}
+        \item $\ttt{bool} : \TT$, $\ttt{unit} : \TT$, $\NN : \TT$, etc. 
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Application: Lists (again)}
+  Recall our type for lists of $\NN$s: 
+  \begin{center}
+    \begin{tabular}{l}
+        \ttt{inductive natlist}  \\ 
+        | \ttt{nil} : \ttt{natlist} \\
+        | \ttt{cons} : $\lamb (a : \NN) \to \lamb (t : \ttt{natlist}) \to \ttt{natlist}$ 
+    \end{tabular}
+  \end{center}\pause
+  Why not build a list for any type? 
+  \begin{center}
+    \begin{tabular}{l}
+        \ttt{inductive list} : $\TT \to \TT$ \\ 
+        | \ttt{nil} : $\lamb (\alpha : \TT) \to \ttt{list} \; \alpha$ \\
+        | \ttt{cons} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to (t :
+        \ttt{list} \; \alpha) \to \ttt{list} \; \alpha$ 
+    \end{tabular}
+  \end{center} 
+\end{frame}
+
+
+\begin{frame}{Terms vs. Types}
+ Terms and types can depend on other terms and types: \pause 
+  \begin{itemize}
+    \item Terms depending on terms: \pause function application 
+      \begin{itemize}
+        \item $(\lamb(x \; y) \to x) \; w \; z$ depends on $w$. 
+      \end{itemize}\pause
+
+    \item Terms depending on types: \pause polymorphic functions
+      \begin{itemize}
+        \item $(\lamb(x) \to x)$ depends on the type of the input $x$. 
+      \end{itemize} \pause
+
+    \item Types depending on types: \pause type constructors
+      \begin{itemize}
+        \item \ttt{list} $\alpha$ depends on the type $\alpha$. 
+      \end{itemize} \pause
+
+    \item Types depending on terms: \emph{dependent types} 
+    \begin{itemize}
+      \item ??? 
+    \end{itemize} 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Type that Depends on a Term}
+  Adapt our polymorphic list to record the length of the list!
+  Recall:
+  \begin{center}
+    \begin{tabular}{l}
+        \ttt{inductive list} : $\TT \to \TT$ \\ 
+        | \ttt{nil} : $\lamb (\alpha : \TT) \to \ttt{list} \; \alpha$ \\
+        | \ttt{cons} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to \lamb (t
+        : \ttt{list} \; \alpha) \to \ttt{list} \; \alpha$ 
+    \end{tabular}
+  \end{center}  
+  \pause 
+  Now consider:
+  \begin{center}
+    \begin{tabular}{l}
+        \ttt{inductive vector} : $\TT \to \NN \to \TT$ \\ 
+        | \ttt{empty} : $\lamb (\alpha : \TT) \to \ttt{vector} \; \alpha \; O$ \\
+        | \ttt{item} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to$ \\
+        \qquad $\lamb (n
+        : \NN) \to \lamb(\ell : \ttt{vector} \; \alpha \; n) \to \ttt{vector}
+        \; \alpha \; (S \; n)$ 
+    \end{tabular}
+  \end{center} 
+  
+\end{frame}
+
+\begin{frame}{Examples: Inductive Types}
+  Some important inductive dependent types: 
+\begin{itemize}
+  \item 
+   \begin{tabular}{l}
+     \ttt{inductive combine} : $\lamb(\alpha : \TT) \to \lamb (\beta : \TT) \to \TT$
+ \\
+     | \ttt{pair} : $\alpha \to \beta \to \ttt{combine}$ $\alpha$ $\beta$
+ \end{tabular}\pause
+ \begin{itemize}
+   \item \ttt{pair} $(S \; O)$ \ttt{true} : \ttt{combine} $\NN$ \ttt{bool}
+ \end{itemize}
+\pause
+\item \begin{tabular}{l}    
+      \ttt{inductive choose} : $\lamb(\alpha : \TT) \to \lamb (\beta : \TT) \to \TT$ \\
+    | \ttt{fst} : $\alpha \to \ttt{choose}$ $\alpha$ $\beta$ \\
+    | \ttt{snd} : $\beta \to \ttt{choose}$ $\alpha$ $\beta$
+\end{tabular}\pause
+\begin{itemize}
+  \item \ttt{fst} $(S \; (S \; O))$ : $\ttt{choose} \; \NN \; \ttt{bool}$
+  \item \ttt{snd false} : $\ttt{choose} \; \NN \; \ttt{bool}$
+  \item \ttt{snd false} : $\ttt{choose} \; \ttt{unit bool}$
+\end{itemize}\pause
+
+\item \ttt{inductive none} : $\TT$ \pause
+  \begin{itemize}
+    \item There are NO terms of type \ttt{none}! (\emph{uninhabited})
+  \end{itemize}
+\end{itemize} 
+
+\end{frame}
+
+\section{Revisiting Logic}
+
+\begin{frame}{Computing with Proofs}
+ Suppose $P, Q$ are propositions with proofs $p, q$, respectively. What is a
+ proof of the ... 
+ \begin{itemize}
+   \item conjunction, $P \wedge Q$? \pause \hfill {\small pair of proofs $(p, q)$.}
+     \pause
+   \item disjunction, $P \vee Q$? \pause \hfill {\small proof + tag: $(1, p)$ or
+   $(2, q)$.}
+   \pause
+ \item implication, $P \to Q$? \pause \hfill {\small function turning $p \to q$.} 
+  \pause
+ \item negation, $\neg P$? \pause \hfill {\small function turning $p \to
+   \text{(proof of false)}$.} 
+ \end{itemize}
+\pause
+ Suppose $S$ is a set and $T : S \to \text{Prop}$ a proposition over $S$. What
+ is a proof of the quantified statement ...
+ \begin{itemize}
+   \item  $\forall x \in S, T(x)$? \pause \hfill {\small
+     function turning $(x \in S) \to \text{proof }t(x)$.}
+    \pause
+   \item  $\exists x \in S, T(x)$? \pause \hfill {\small
+     pair of instance $x \in S$, proof $t(x)$.}
+ \end{itemize}
+
+\end{frame}
+
+
+\section{The Correspondence}
+
+\begin{frame}{The Curry-Howard Correspondence}
+  \begin{alertblock}{\Large\centering \emph{types $\rightleftharpoons$ propositions}
+    \quad \emph{terms $\rightleftharpoons$ proofs} }
+
+    \begin{center}
+    \begin{tabular}{c|c||c|c}
+    Type & Proposition & Expression & Proof  \\ \hline
+    \only<1>{???}\only<2->{\ttt{combine} $\alpha$ $\beta$} & $P \wedge Q$ &
+    \only<1>{???}\only<2->{$\ttt{pair} \; a \; b$} & $(p, q)$ \\
+    \only<1-2>{???}\only<3->{\ttt{choose} $\alpha$ $\beta$} & $P \vee Q$ &
+    \only<1-2>{???}\only<3->{$\ttt{fst} \; a, \ttt{snd} \; b$} & $(1, p), (2, q)$\\
+    \only<1-3>{???}\only<4->{$\alpha \to \beta$} & $P \to Q$ & 
+    \only<1-3>{???}\only<4->{$\lamb : a \mapsto b$} & $f : p \mapsto q$ \\
+    \only<1-4>{???}\only<5->{\ttt{unit}} & true & 
+    \only<1-4>{???}\only<5->{$*$} & $\exists$ \\
+    \only<1-5>{???}\only<6->{\ttt{none}} & false &
+    \only<1-5>{???}\only<6->{\texttwemoji{x}} & $\nexists$ \\
+    \only<1-6>{???}\only<7->{$\alpha \to \ttt{none}$} & $\neg P$ & 
+    \only<1-6>{???}\only<7->{$\lamb : a \mapsto \lightning$} & $f : p
+    \mapsto \bot$ \\ 
+    \only<1-7>{???}\only<8->{$\lamb(a : \alpha) \to \beta$} & $\forall x \in P$,
+    $Q(x)$ &
+    \only<1-7>{???}\only<8->{$\lamb : a \mapsto b(a)$} & $f : x \mapsto q(x)$ \\
+   ??? & $\exists x \in P$, $Q(x)$ & ??? & $(x, q(x))$
+   \end{tabular}
+    \end{center}   
+ \end{alertblock}
+ \begin{center}
+  \only<9->{
+   \vspace{-1em}
+    \Large$\Downarrow$ 
+
+
+  \large{checking proof correctness $\rightleftharpoons$ type-checking term}}  
+ \end{center} 
+\end{frame}
+
+
+
+\section{Demo!}
+
+\begin{frame}{Resources}
+  \begin{itemize}
+    \item Coq
+      \begin{itemize}
+        \item Software Foundations
+      \end{itemize}
+    \item Lean 
+      \begin{itemize}
+        \item The Natural Number Game
+        \item leanprover-community (mathlib), Xena Project  
+      \end{itemize}
+    \item Agda {\scriptsize(less beginner-friendly)}
+      \begin{itemize}
+        \item HoTTEST Summer School 2022, HoTT Book
+        \item agda-unimath, TypeTopology
+        \item cubical Agda, 1Lab 
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{\texorpdfstring{\includegraphics[width=36pt]{yellowPig.png}}{P.I.G.}}
+
+\backupbegin
+
+\section{Secret Slides}
+
+\begin{frame}{What's the type of a sort?}
+  \emph{Can we have $\TT : \TT$?}
+  \pause \vspace{12pt}
+
+  \textbf{NO!} It's actually not consistent to allow $\TT :
+    \TT$  -- the argument of this
+    is similar to ``the barber who shaves everyone who doesn't shave
+    themselves'', i.e. Bertrand's paradox.
+    Instead, we have \emph{Girard's
+    paradox} which breaks this construction. 
+    \pause \vspace{12pt}
+
+    In fact, we actually
+    need $\TT : \TT_1$, and then $\TT_1 : \TT_2$, etc. The $\TT_i$s are called
+    \emph{type universes} and this is more of a technical point that's need to
+    make things work, but often isn't relevant. . 
+\end{frame}
+
+
+\begin{frame}{The equality type?}
+  \emph{What type corresponds to the equality proposition?}
+  \pause \vspace{12pt}
+
+  We actually can just make an inductive type for this: 
+  \begin{center}
+    \begin{tabular}{l}
+      \ttt{inductive equal} : $\lamb (\alpha : \TT) \to \alpha \to \alpha \to \TT$ \\
+      | \ttt{refl} : $\lamb (\alpha : \TT) \to \lamb(a : \alpha) \to \ttt{equal} \; \alpha \; a \; a $
+    \end{tabular}
+  \end{center}
+  \pause 
+
+  There is only one constructor of this type, and it represents the reflexivity
+  of equality (where the two sides of the equality are equivalent). 
+\end{frame}
+
+
+\begin{frame}{Defining complicated propositions?}
+  \emph{How do we get more complicated propositions?}
+  \pause \vspace{12pt}
+
+  We can just make more types with appropriate constructors. For instance,
+  consider the $\leq$ relation on $\NN$:  
+  \begin{center}
+    \begin{tabular}{l}
+      \ttt{inductive leq} : $\lamb (m : \NN) \to \lamb (n : \NN) \to \TT$ \\
+      | \ttt{leq-O} : $\lamb (n : \NN) \to \ttt{leq} \; O \; n $ \\
+      | \ttt{leq-S} : $\lamb (m : \NN) \to \lamb (n : \NN$) \\
+      \quad $\to \lamb (H:
+      \ttt{leq} \; m \; n) \to \ttt{leq} \; (S \; m) \; (S \; n)$
+    \end{tabular}
+  \end{center}
+  \pause 
+
+  Here, we can get a proof of this proposition if we either generate it directly
+  from the fact that all naturals are $\geq$ 0, or by reducing successor
+  functions on either side of the $\leq$ until we get the above case. This is
+  again inductive!
+  
+\end{frame}
+
+\begin{frame}{Defining algebraic structures?}
+  \emph{How does one encode an algebraic structure as a type?}
+  \pause \vspace{12pt}
+
+  \emph{Record types} accomplish this, bundling together the
+  type for the underlying set and all necessary
+  operations/properties. For example, here's a group: 
+  \begin{center}
+    \begin{tabular}{l}
+      \ttt{struct group} : $\lamb (\alpha : \TT) \to \TT$ \quad \{\\
+      | \quad \ttt{mul} : $\alpha \to \alpha \to \alpha$ \\
+      | \quad \ttt{id} : $\alpha$ \\
+      | \quad \ttt{inv} : $\alpha \to \alpha$ \\ 
+      | \quad \ttt{mul\_id} : $\lamb (x : \alpha) \to \ttt{mul} \; x \; \ttt{id}
+      \; = \; x$ $\dots$ \} \\
+    \end{tabular}
+  \end{center}
+  \pause
+
+  One can also encode hierarchies of algebraic structures in types as well,
+  e.g. a ring is a group + structure. Record types are also useful for
+  encoding $\exists$ propositions. 
+\end{frame}
+
+\backupend
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+

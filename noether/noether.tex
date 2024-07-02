@@ -1,0 +1,327 @@
+\documentclass[12pt]{article}
+\usepackage{blubird}
+% has options [nodate, nosans, nofancy, nocolor, code]
+
+% TITLE
+\title{Noether's Theorem}
+\author{Bryan Lu}
+\date{9 June 2023} % do not use if [nodate] option enabled
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+In 1915, mathematician Emmy Noether proved a theorem in mathematical
+physics that has provided critical insights into developing new theory and 
+analyzing physical systems in the 20th century. It can be concisely stated as
+follows: 
+\begin{center}
+  \tit{For every \tbf{continuous symmetry} of a system, there is a corresponding
+  \tbf{conserved quantity}.} 
+\end{center}
+This is kind of like vague and confusing though -- what does this mean, and how
+do we get it? 
+
+\section{Lagrangian Mechanics}
+To understand this statement, we have to transition to a different formalism for
+mechanics than the typical formalism presented in physics. In a nutshell,
+instead of the ``forces cause motion'' perspective on mechanics, we instead
+consider a general principle guiding a system, i.e. the idea that ``nature 
+takes the path of `least resistance.''' This is sort of imprecise,
+but it's a useful line of reasoning -- we consider the \tbf{action} $S =
+\int_{t_1}^{t_2} \lagr \, dt$ for a quantity $\lagr$ called the \tbf{Lagrangian} that is
+expressed in the coordinates (and their time derivatives) of the system, i.e.
+$\lagr
+= \lagr(q_1, \dots, q_n, \dot q_1, \dots, \dot q_n, t)$, and we postulate instead that
+the action must be minimized (\tbf{Hamilton's principle}). This mathematical
+idea leads to the \tbf{Euler-Lagrange equations},
+which tells us if the $q_i$s (as functions of time, $t$) describe the actual
+motion of the system, then $\dv{}t \left( \pdv \lagr {\dot q_i} \right) - \pdv
+\lagr{q_i} = 0$. It turns out that when $\lagr = T - V$, where $T$ is the kinetic
+energy of the system and $V$ is the potential energy of the system, we can
+recover the normal equations of motion a la Newtonian mechanics. For example, in
+one variable, applying Euler-Lagrange: 
+\[
+  \lagr = T - V = \frac{1}{2} m \dot x ^2 - V(x) \Rightarrow \dv{}{t} \left(
+    m \dot x \right) + \dv V x = 0 \Rightarrow m \ddot x = - \dv V x 
+\] 
+we can easily recover Newton's second law! In particular, reasoning from
+Newton's laws, we can show that if we have conservative forces, this form of
+$\lagr$ is the correct one. 
+
+In general, the coordinates $q_i$ can represent coordinates that are not
+necessarily ``dimensions of length,'' i.e. charge, angle, etc. also work. For
+instance, if we do things in the plane in polar coordinates, then: 
+\[
+  \lagr = T - V = \frac{1}{2} m (\dot r^2 + r^2 \dot \theta^2) - V(r, \theta) 
+\] 
+\[
+  \dv{} t (m \dot r) - mr \dot \theta^2 = - \pdv V r \qquad \dv{}t (mr^2 \dot
+  \theta) = - \pdv V \theta 
+\] 
+and now we proceed as before, solving these differential equations. Note the
+appearance of the acceleration in polar coordinates appearing in the correct
+forms on the left side, and the force on the right. 
+
+We can see then that the Lagrangian is a way for us to \tit{describe our system}
+compactly in a single function, and its forms may vary based on accounting for
+other forces (i.e. electromagnetism).
+
+\section{Noether's Theorem}
+One of the most important tools that we were able to use when solving problems before was with conserved quantities, such as linear momentum, angular momentum, and energy - but it's not really clear how they arise in Lagrangian mechanics. 
+
+Since the Lagrangian we know describes our system, we now describe what we mean
+by a continuous symmetry. Remember that the coordinates $q$ are their own
+functions of time $t$. Suppose that we can model a transformation of $q$ as a
+function $\tilde q(s, t)$, so that the coordinates can also be changed
+as a continuous function of a different parameter, $s$, and when $s = 0$,
+$\tilde q(0, t) = q(t)$ is left invariant. When we replace all instances of $q$ with
+$\tilde q$ in our Lagrangian, let's see how to vary $s$ very
+slightly in a way that leaves the Lagrangian invariant. If we can, then this actually induces a conserved quantity, which will
+follow from some mathematical computation. For any symmetry, we 
+specifically want for our definition that the
+Lagrangian is constant up to first order, so we have $\dv{\lagr}{s}\Big|_{s=0} =
+0$. This means we only need to consider first-order changes in $q$ as well, so
+assume $\tilde q(s, t) \approx q(t) + s\xi(t)$:  
+\[
+  0 = \dv{\lagr}{s}\Big|_{s=0} 
+  = \left(\pdv{\lagr}{\tilde q} \dv{\tilde q}{s} + \pdv{\lagr}{\dot{\tilde q}}
+    \dv{\dot{\tilde q}}{s}\right)\Big|_{s=0}  
+    = \dv{}{t} \left(\pdv{\lagr}{\dot{q}} \right) \xi +
+  \pdv{\lagr}{\dot{q}} \dv{\xi}t   \\ 
+    = \dv{}{t} \left(\pdv{\lagr}{\dot{q}} \xi \right) 
+\]
+so it seems that the quantity $\pdv \lagr {\dot q} \xi$ is constant!
+This quantity is sometimes called the ``conserved charge'' from field theory,
+but I'd particularly like to draw your attention to $\pdv \lagr {\dot q}$, which
+is sometimes called the canonical conjugate \tbf{momentum} $p$ for the
+coordinate $q$.  
+We can see this explicitly appear as a constant of the Euler-Lagrange equation
+if the Lagrangian doesn't contain $q$, as then $\dv p t = 0$, so in this
+case, $p$ is a constant of motion and our symmetry can be ``change $q$ however
+we like because it doesn't matter.'' 
+Regardless, from a symmetry, we have found a conserved quantity -- this, in essence, is \textbf{Noether's Theorem}! 
+
+As a simple example, we can look at the case of a free particle not under the
+influence of any potential in Cartesian coordinates (in three dimensions):
+\[
+	\lagr = \frac{1}{2} m v^2 = \frac{1}{2} m ( \dot{x}^2 + \dot{y}^2 + \dot{z}^2 )
+\]
+If we consider translating $x$ by a constant amount, then we simply get $p_x =
+\pdv \lagr{\dot x} = m \dot x$ (up to a constant multiple) as a conserved
+quantity... but you might recognize this as the linear momentum in the $x$
+direction! Similar result holds for $y$ and $z$. 
+Notice that in the absence of a potential, no external forces are acting on the
+object - therefore, in the absence of an external force, we have that momentum
+is conserved, 
+so we get conservation of linear momentum for free! We can similarly get
+a familiar conserved quantity if we apply the same idea to a free particle 
+and use cylindrical/spherical coordinates, perhaps in a spherical
+potential $V(r)$: 
+\[
+ \lagr = \frac{1}{2} m (\dot r^2 + r^2 \dot \theta^2 + r^2 \sin^2\theta \dot
+ \vphi^2) - V(r)
+\]
+Then for $\vphi$ (being physicists, $\theta$ is the polar angle and $\vphi$ is
+the azimuthal angle), we have that $p_\vphi = m r^2 \sin^2 \theta \dot \vphi = m
+z^2 \dot \vphi$, which is the component of the angular momentum with respect to
+the $z$-axis! We have therefore recovered two familiar conserved quantities from
+mechanics from this formalization. 
+
+\subsection{Conservation of Energy and the Hamiltonian}
+How do we get to the idea of conservation of energy? The only coordinate that we
+haven't really talked about homogeneity with is the time coordinate $t$, and so
+by process of elimination one might assume that energy is the conserved quantity
+associated with temporal invariance. However, time is special when discussing
+symmetries, because we can vary the actual functions of time with our parameter
+$s$ as a ``perturbation,'' but not so here. Instead, for the coordinate $q$, we
+use $s$ to translate in time, via $q(s; t) = q(t + s)$. We see then that 
+\[
+ \dv{\lagr}s \Big|_{s = 0} = \left( \pdv \lagr q \dv q s + \pdv \lagr {\dot q}
+   \dv {\dot q} s\right)\Big|_{s = 0} = \dv{} t \left( \pdv \lagr {\dot q}
+ \right) q'(t) + \pdv \lagr q q''(t) = \dv \lagr t 
+\]
+if the Lagrangian has no explicit time dependence at all. 
+Then, using the derivation above, we have that $\dv{}t (p \dot q - \lagr) = 0$, so
+$\ham = p \dot q - \lagr$ appears to be the conserved quantity here. What is
+this $\ham$ thing? 
+
+If we take $\lagr = \frac{1}{2}m \dot x^2 - U(x)$ in the 1-dimensional form, $p
+= m \dot x$, and so $\ham = p \dot x - \lagr = m \dot x^2 - \frac{1}{2} m \dot x^2 +
+U(x) = \frac{1}{2} m \dot x^2 + U(x)$ appears to be the total energy! So it
+appears that $\ham$, the \tbf{Hamiltonian}, which is the corresponding conserved
+quantity for time translation, is energy. In general, this is not quite true,
+especially if the Lagrangian is written in not the rest frame, but it's a
+reasonable equivalence to make.  
+
+\section{Hamiltonian Mechanics}
+Since the Hamiltonian is kind of close to the Lagrangian, it might interesting
+to consider maybe using the Hamiltonian (which is a slightly more familiar
+quantity, and often is the total energy of the system) to get our equations of
+motion instead. It turns out, we can do this, but it becomes more natural to use
+the coordinates $q$ and the conjugate momentums $p$ instead of $q$ and $\dot q$
+as in the Lagrangian. In this sense, $\ham$ is a function that operates over an
+even-dimensional space with corresponding dimensions matching the $q$s and $p$s,
+and in particular (somewhat strangely) we should take $q$ and $p$ as independent
+and therefore $\dot q$ as being dependent on $q$s and $p$s. 
+
+First, let's note $\pdv \ham p = \dot q + p \pdv {\dot q} p - \pdv{\lagr} p$ from the
+chain rule. But what's $\pdv \lagr p$? 
+\[
+ \pdv \lagr p = \pdv \lagr q \pdv q p + \pdv \lagr {\dot q} \pdv{\dot q} p = 0 +
+ p \pdv {\dot q} p \Rightarrow \pdv \ham p = \dot q
+\]
+Now, what about $\pdv H q$? We do the same thing, but we have to be careful
+about what things are being kept constant in the partials: \[
+  \pdv \ham q = \pdv{\dot q} q p + \dot q \pdv p q - \pdv \lagr q = \pdv{\dot q}
+  q  p - \pdv \lagr q.
+\] 
+Remember that the evaluation of $\pdv \lagr q$ is holding $p$ constant, not
+$\dot q$, so we have to be careful. We can do the computation with differentials
+first:  
+\[
+  d \lagr = \pdv \lagr q \, dq + \pdv \lagr {\dot q} \, d \dot q + \pdv \lagr p
+  \, dp
+\] 
+where each of the partials here hold the other two variables constant. 
+Now set $dp = 0$, and write $d \dot q$ as $\pdv{\dot q} q \, dq$. This then
+gives \[ \left(\pdv \lagr q\right)_p = \left(\pdv \lagr q\right)_{\dot q} + \left(
+\pdv \lagr {\dot q} \right)_q \pdv{\dot q}q = \dot p + p \pdv{\dot q}q
+\Rightarrow \pdv \ham q = - \dot p 
+\] where we substitute definitions and use Euler-Lagrange. Together, the
+equations $\dot p = - \pdv \ham q$ and $\dot q = \pdv \ham p$ are called
+\tbf{Hamilton's equations}, and are equivalent to the Lagrangian formalism's
+Euler-Lagrange equations. 
+
+Let's do a sanity check to see if this still makes sense. Suppose $\ham$ is the
+Hamiltonian for a particle with a potential $U(x)$, so $\ham = \frac{p^2}{2m} +
+U(x)$. Then $-\pdv \ham x = - \dv U x = \dot p$ which is just Newton's second
+law again, and $\pdv \ham p = \frac{p}{m} = \dot x$ which is just the definition
+of the linear momentum. And again, if we work in say, polar coordinates in 2D,
+$p_r = m \dot r$ and $p_\theta = mr^2 \dot \theta = L$, the angular momentum, so
+$\ham = \frac{p_r^2}{2m} + \frac{L^2}{2mr^2} + V(r, \theta)$, and so the four
+equations we get are
+\[
+  \frac{p_r}{m} = \dot r \quad -\pdv V r + \frac{L^2}{4mr^3} = \dot p_r \quad
+  \frac{L}{mr^2} = \dot \theta \quad - \pdv V \theta = \dot L   
+\] 
+This seems like a weird thing to do, especially since we basically doubled the
+number of equations and half of them end up appearing like definitions, so it
+seems like this isn't super helpful... but with a little bit of extra structure,
+it will!
+
+\section{Poisson Brackets and Noether's Theorem (Again!)}
+In general, any physical quantity we would like to measure that is not constant
+can be expressed in terms of the coordinates $p$ and the momenta $q$, so an
+observable $A$ is a function $A(q, p)$, where $p$ and $q$ themselves might vary
+with time too. The following construct may seem unmotivated, but we'll quickly
+see its utility. Define the \tbf{Poisson bracket} of two functions $\set{A, B}$ as
+\[
+  \set{A, B} = \pdv{A}{q} \pdv{B}{p} - \pdv{A}{p} \pdv{B}{q}
+\]
+The Poisson bracket has some nice properties and identities that can be proved,
+but the ones we'll need are that $\set{A, A} = 0$ and $\set{A, B} = - \set{B,
+A}$.
+
+Let's do some examples -- first, we should see $\set{q, p} = 1$. We also have a
+Hamiltonian $\ham$ -- what happens with the Poisson bracket of $\ham$ with the
+coordinates and momenta? We can see that 
+\[
+  \set{q, \ham} = \pdv \ham p = \dot q \quad \set{p, \ham} = - \pdv \ham q =
+  \dot p.
+\] 
+We can then rewrite Hamilton's equations as $\dot q = \set{q, \ham}$ and $\dot p
+= \set{p, \ham}$. One might guess in general for any observable $W$, that $\dot
+W$ might be amenable to the Poisson bracket too! In general, with the chain
+rule, if $W$ is not explicitly dependent on time, 
+\[
+ \dv W t = \pdv W q \dv q t + \pdv W p \dv p t = \pdv W q \pdv \ham p - \pdv W p
+ \pdv \ham q = \set{W, \ham}
+\] 
+so Poisson brackets with the Hamiltonian give the time derivative. If $W$
+happens to be a conserved quantity, then, $\set{W, \ham} = 0$, i.e. $W$
+\tbf{Poisson-commutes} with the Hamiltonian.
+
+Where are we going with this? Let's try to build a bridge again between
+conserved quantities and symmetries, but this time, we want to build a symmetry
+of the Hamiltonian of our system, and the Poisson bracket will allow us to see
+the duality of these perspectives even more clearly. In the language of
+Hamiltonian mechanics, we consider what are called \tbf{canonical
+transformations}, a $Q(\eps) = q + \eps A(q, p)$ and $P(\eps) = p + \eps B(q,
+p)$, where our deviations $A$ and $B$ are functions of $q, p$, the independent
+coordinates of the Hamiltonian. Suppose for our conserved quantity $W(p, q)$, we
+wish for our transformation to not change $W$ up to first order. Then 
+\[
+ W(Q,P) = W(q + \eps A, p + \eps B) = W(q, p) + \eps A \pdv W q + \eps B \pdv W
+ p 
+\] 
+where we ignore higher-order terms. We also want (as a part of ``canonicity'')
+that our transformation should respect the existing relation $\set{Q, P} = 1$.
+Ignoring higher-order terms in $\eps$ again:  
+\[
+  \set{Q, P} = \set{q, p} + \eps ( \set{A, p} + \set{q, B}) \Rightarrow
+  \pdv A q + \pdv B p = 0
+\] 
+One easy way to satisfy this is when $A = \pdv V p$, $B = - \pdv V q$ for some
+observable $V$, so to make the first-order deviation in $W$ to be zero, we get
+that $\set{W, V} = 0$. Well, we already have $W$, so why not have $V = W$? Then
+an infinitesimal transformation in coordinates that leaves $W$ invariant is $Q =
+q + \eps \pdv W p$, $P = p - \eps \pdv W q$. This extends generally to larger
+translations using $\dv Q \eps = \pdv W p$, $\dv P \eps = - \pdv W
+q$.
+
+Back to an infinitesimal transformation, we can see what happens to any other observable
+$U$, up to first order: 
+\[
+ U(Q, P) = U(q, p) + \eps \left(\pdv U q \pdv W p - \pdv U p \pdv W q \right) = U(q, p) +
+ \eps\set{U, W}
+\] 
+so $\dv U \eps = \set{U, W}$. We can use this idea to transform $U$
+non-infinitesimally, holding $W$ constant, using a Taylor series. Let $P_W$ be
+the operator defined by $B_W(X) = \set{X, W}$. Then: 
+\[
+  U(Q, P; \eps) = \sum_{k=0}^\infty \frac{\eps^k}{k!} \dnv U \eps n \Big|_{\eps = 0} =
+  \sum_{k=0}^\infty \frac{\eps^k}{k!} B_W^k(X) = e^{\eps B_W}(X)
+\]
+so the Poisson bracket with the conserved quantity \tbf{generates} the infinite
+family of transformations of $X$ holding $W$ constant. In the special case where
+$W = \ham$, we see that these transformations correspond to time-translations,
+since $\dv X t = \set{X, \ham}$. Moreover, when $W = p$, we have that
+$\set{X, p} = \pdv X q$, so the transformation generated by $p$ gives
+translations in $q$ (which goes for both $q$ that has units of length, giving
+momentum, and $q$ with units of radians, giving angular momentum). In general,
+we see that every conserved quantity generates a \tbf{one-parameter subgroup} of
+canonical transformations acting on $(q, p)$ via the exponential map, or a
+\tbf{flow} of the coordinates $(q, p)$.  
+
+Now, we know a conserved quantity gives $\set{W, \ham} = 0$, so that $W$ is
+invariant under time translations. But, we also have that $\set{\ham, W} = 0$,
+so that $\ham$ is invariant under the transformations generated by $W$, which gives
+a symmetry of $\ham$. This is Noether's Theorem again, but with the two notions
+very clearly dual via the Poisson bracket!
+
+
+
+\subsection{A Connection to Quantum Mechanics}
+The last thing -- the Poisson bracket corresponds very closely to the commutator
+of quantum mechanics fame. Consider $\set{F_1F_2, G_1G_2} = \pdv{F_1 F_2}q
+\pdv{G_1 G_2}p - \pdv{F_1 F_2}p \pdv{G_1 G_2}q$. We may factor this in two ways and obtain 
+\[
+  \set{F_1, G_1}(F_2G_2-G_2F_2) = (F_1G_1-G_1F_1)\set{F_2, G_2}
+\]
+which gives 
+\[
+  \frac{\comm{F_1}{G_1}}{\set{F_1, G_1}} = \frac{\comm{F_2}{G_2}}{\set{F_2, G_2}}
+\]
+where $[F, G] = FG - GF$, assuming the $F$s and $G$s do not commute as operators. 
+These have to be equal to some constant $\lambda$, since each side is
+independent. This implies that $\comm{F}{G} = \lambda \set{F, G}$, which gives a
+direct correspondence between the Poisson bracket of two functions and their
+commutator. If these happen to be some canonical variables $q, p$, we see that 
+$[q, p] = \lambda. $
+If we let $\lambda = i\hbar$, this allows us to bridge the gap between classical
+and quantum mechanics, as we now obtain the Heisenberg commutation relations for
+position/momentum.
+This small step, made first by Dirac, gives us a \tbf{canonical quantization} of classical mechanics, which is one of the first steps to rigorizing the treatment of quantum mechanics. 
+
+\end{document} 
