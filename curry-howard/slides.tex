@@ -23,10 +23,10 @@
   \begin{minipage}{0.6\textwidth}
   \begin{itemize}
     \item HCSSiM 2019 alum
-      \begin{itemize}
-        \item PJ writer/editor
-        \item (former) Frisbee extraordinaire
-      \end{itemize}
+%      \begin{itemize}
+%        \item PJ writer/editor
+%        \item (former) Frisbee extraordinaire
+%      \end{itemize}
     \item Graduate Student in Math @ University of Washington
       \begin{itemize}
         \item BA Math/Computer Science from Cornell University 
@@ -50,8 +50,8 @@
 	\setcounter{showSlideNumbers}{1}
 
 
-\begin{frame}{Computers in Math}
-  Computer programs help solve problems: 
+\begin{frame}{Computational Power in Math}
+  \pause
   \begin{itemize}
     \item The four-color theorem (1976)
     \item Optimal sphere-packing (1998)
@@ -63,7 +63,8 @@
 
 
 \begin{frame}{Proofs Verified by Computers}
- \small{Proofs/programs checked by \emph{proof assistants}:} 
+ \small{Proofs/programs checked by \emph{proof assistants}:}
+ \pause
  \begin{itemize}
    \item The four-color theorem (Coq, 2002) 
    \item The CompCert C Compiler (Coq, 2009)
@@ -77,11 +78,14 @@
 
 \begin{frame}{\includegraphics[width=26pt]{yellowPig.png}}
   \begin{center}
-    \Huge{\textit{How does the computer know a proof is correct?}}
+    \Huge{Q: \texttwemoji{thinking} $\Rightarrow$ \texttwemoji{desktop
+    computer} $\Rightarrow$ \texttwemoji{check mark
+  button}/\texttwemoji{x}?}
+\pause 
+\vspace{1em}
 
-    \Huge{\texttwemoji{desktop computer} $\rightleftharpoons$
-    \texttwemoji{thinking}}
-
+    \huge{A: \texttwemoji{sparkles}\emph{programming
+    languages}\texttwemoji{sparkles}!}
   \end{center}
 \end{frame}
 
@@ -93,18 +97,20 @@ Terms in the simply-typed $\lamb$-da calculus:
 \[
   e ::= c \mid x \mid \lamb(x:t) \to e \mid e_1 \, e_2 
 \] 
-
+Some examples of terms: 
+\[
+  \ttt{true},\; \ttt{false},\; *, \; x,\; y,\; \lamb(x) \to x, \; (\lamb(x) \to
+  \ttt{true}) \; *
+\]
+\pause
 All terms have types:
 \[
   t ::= T \mid t_1 \to t_2
 \]
-\pause
-Some basic examples of types: 
+Basic types include $\ttt{bool}, \ttt{unit},$ etc. 
 \[
-  T = \set{\ttt{bool}, \ttt{unit}, \dots}
-\] 
-\[
-\ttt{bool} ::= \ttt{true} \mid \ttt{false} \qquad \ttt{unit} ::= *
+  \ttt{true} : \ttt{bool} \quad \ttt{false} : \ttt{bool} \quad * : \ttt{unit}
+  \quad \lamb(x) \to \ttt{true} : t \to \ttt{bool}
 \] 
 
 
@@ -119,13 +125,13 @@ Some basic examples of types:
       \item $e_1 \; \ttt{true} = (\lamb (x : t) \to x) \; \ttt{true} = \ttt{true}$  
     \end{itemize}
    \pause \item $e_2 = $ \only<3>{$\lamb(x:t_1) \to \lamb(y:t_2) \to x$}
-   \pause {$\lamb (x \; y) \to x \, : \only<4>{\,\; ???} \pause  \, \only<5>{t_1 \to (t_2
+   \pause {$\lamb (x, y) \to x \, : \only<4>{\,\; ???} \pause  \, \only<5>{t_1 \to (t_2
    \to t_1)} \pause t_1 \to t_2 \to t_1 $} \hfill constant function
    \begin{itemize}
      \item NOT the same as $(t_1 \to t_2) \to t_1$!
    \end{itemize}
   \pause 
-\item $e_3 = \lamb (x \; y) \to x \; y \, : \only<7>{\,\; ???} \pause \, (t_1 \to t_2) \to t_1 \to
+\item $e_3 = \lamb (x, y) \to x \; y \, : \only<7>{\,\; ???} \pause \, (t_1 \to t_2) \to t_1 \to
      t_2$ \hfill \footnotesize{evaluation function}
      \begin{itemize}
        \item $e_3 \; e_1 \; * = e_1 \; * = *$
@@ -136,24 +142,24 @@ Some basic examples of types:
   
 \end{frame}
 
-\begin{frame}{Exercise}
+\begin{frame}{Exercise/Questions?}
   \emph{What is the type of the following term?}
 \[
-  e_4 = \lamb(x \; y \; z) \to x \; z \; (y \; z)
+  e_4 = \lamb(x, y, z) \to x \; z \; (y \; z)
 \] 
-\pause
-\begin{itemize}
-  \item Suppose $x : \alpha$, $y : \beta$, $z : \gamma$. \pause
-  \item $y$ is a function with one argument of type $\gamma$, so $\beta = \gamma
-    \to \delta$. 
-  \item $x$ is a function with one argument of type $\gamma$ followed by an argument
-    of type $\beta \; \delta = (\gamma \to \delta) \; \gamma = \delta$.
-    \begin{itemize}
-      \item Therefore $\alpha = \gamma \to \delta \to \epsilon$. 
-    \end{itemize} \pause
-  \item $e_4 : (\gamma \to \delta \to \epsilon) \to (\gamma \to \delta) \to
-    \gamma \to \epsilon$. 
-\end{itemize}
+%\pause
+%\begin{itemize}
+%  \item Suppose $x : \alpha$, $y : \beta$, $z : \gamma$. \pause
+%  \item $y$ is a function with one argument of type $\gamma$, so $\beta = \gamma
+%    \to \delta$. 
+%  \item $x$ is a function with one argument of type $\gamma$ followed by an argument
+%    of type $\beta \; \delta = (\gamma \to \delta) \; \gamma = \delta$.
+%    \begin{itemize}
+%      \item Therefore $\alpha = \gamma \to \delta \to \epsilon$. 
+%    \end{itemize} \pause
+%  \item $e_4 : (\gamma \to \delta \to \epsilon) \to (\gamma \to \delta) \to
+%    \gamma \to \epsilon$. 
+%\end{itemize}
 %\begin{itemize}
 %   \item $\lamb x \, y \, z \to x \, z \, (y \, z)$ -- substitution
 %   \item $\lamb x \, y \, z \to (y \, z) \, (x \, z)$ -- contradiction
@@ -197,6 +203,7 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
 
   \emph{Induction principles} (\emph{elimination rules}) allow you to define
   functions on inductive types.  
+  \pause
  \begin{example}
    The induction principle of $\NN$ requires us to specify values for the ``base case'' and
    ``inductive step.''\pause
@@ -212,9 +219,9 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
    \begin{minipage}{0.45\textwidth}
    \begin{tabular}{l}
      \ttt{add} \, : \, $\NN \to \NN \to \NN$ =\\
-     \ttt{ }$\lamb(x \; y) \to$ \ttt{match}  $y$  \ttt{with} \\
-     \ttt{  }| $O \to x$ \\
-     \ttt{  }| $S \; k \to S \; (\ttt{add} \; x \; k)$ 
+     \ttt{ }$\lamb(x, y) \to$ \ttt{match}  $y$  \ttt{with} \\
+     \ttt{  }| $O \Rightarrow x$ \\
+     \ttt{  }| $S \; k \Rightarrow S \; (\ttt{add} \; x \; k)$ 
    \end{tabular}  
    \end{minipage}
  \end{example} 
@@ -232,8 +239,9 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
 \begin{example} \pause
   \begin{tabular}{rl}
     \ttt{nil} &$\sim$ \quad [ ] \\ \pause 
-    \ttt{cons} \, (S O) \, \ttt{nil} &$\sim$ \quad [1] \\ \pause
-    \ttt{cons} \, O \, (\ttt{cons} \, (S O) \, \ttt{nil}) &$\sim$ \quad [0, 1] \\
+    \ttt{cons} \, $(S \; O)$ \, \ttt{nil} &$\sim$ \quad [1] \\ \pause
+    \ttt{cons} \, $(S \; (S \; O))$ \, (\ttt{cons} \, $(S \; O)$ \, \ttt{nil}) &$\sim$ \pause
+    \quad [2, 1] \\
     \pause
                                                              &\vdots
   \end{tabular}
@@ -260,7 +268,8 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
         \item ``$t_1 \to t_2$'' $= \lamb (\_ : t_1) \to t_2$ ($t_2$ doesn't
           depend on $x$)
       \end{itemize}
-    \item Introducing of the \emph{sort} $\TT$, the ``type'' of types
+      \pause
+    \item Introducing the \emph{sort} $\TT$, the ``type'' of types
       \begin{itemize}
         \item $\ttt{bool} : \TT$, $\ttt{unit} : \TT$, $\NN : \TT$, etc. 
       \end{itemize}
@@ -276,14 +285,22 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
         | \ttt{cons} : $\lamb (a : \NN) \to \lamb (t : \ttt{natlist}) \to \ttt{natlist}$ 
     \end{tabular}
   \end{center}\pause
-  Why not build a list for any type? 
+  Why not build a list for \emph{any} type? 
   \begin{center}
+    \only<2>{
     \begin{tabular}{l}
         \ttt{inductive list} : $\TT \to \TT$ \\ 
         | \ttt{nil} : $\lamb (\alpha : \TT) \to \ttt{list} \; \alpha$ \\
-        | \ttt{cons} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to (t :
+        | \ttt{cons} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to \lamb (t :
         \ttt{list} \; \alpha) \to \ttt{list} \; \alpha$ 
-    \end{tabular}
+    \end{tabular}}
+    \only<3->{
+    \begin{tabular}{l}
+        \ttt{inductive list} : $\TT \to \TT$ \\ 
+        | \ttt{nil} : $\lamb (\alpha : \TT) \to \ttt{list} \; \alpha$ \\
+        | \ttt{cons} : $\lamb (\alpha : \TT, a : \alpha, t :
+        \ttt{list} \; \alpha) \to \ttt{list} \; \alpha$ 
+    \end{tabular}}
   \end{center} 
 \end{frame}
 
@@ -291,17 +308,17 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
 \begin{frame}{Terms vs. Types}
  Terms and types can depend on other terms and types: \pause 
   \begin{itemize}
-    \item Terms depending on terms: \pause function application 
+    \item Terms depending on terms: \pause function application \pause 
       \begin{itemize}
         \item $(\lamb(x \; y) \to x) \; w \; z$ depends on $w$. 
       \end{itemize}\pause
 
-    \item Terms depending on types: \pause polymorphic functions
+    \item Terms depending on types: \pause polymorphic functions \pause
       \begin{itemize}
         \item $(\lamb(x) \to x)$ depends on the type of the input $x$. 
       \end{itemize} \pause
 
-    \item Types depending on types: \pause type constructors
+    \item Types depending on types: \pause type constructors \pause
       \begin{itemize}
         \item \ttt{list} $\alpha$ depends on the type $\alpha$. 
       \end{itemize} \pause
@@ -320,7 +337,7 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
     \begin{tabular}{l}
         \ttt{inductive list} : $\TT \to \TT$ \\ 
         | \ttt{nil} : $\lamb (\alpha : \TT) \to \ttt{list} \; \alpha$ \\
-        | \ttt{cons} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to \lamb (t
+        | \ttt{cons} : $\lamb (\alpha : \TT, a : \alpha, t
         : \ttt{list} \; \alpha) \to \ttt{list} \; \alpha$ 
     \end{tabular}
   \end{center}  
@@ -329,10 +346,8 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
   \begin{center}
     \begin{tabular}{l}
         \ttt{inductive vector} : $\TT \to \NN \to \TT$ \\ 
-        | \ttt{empty} : $\lamb (\alpha : \TT) \to \ttt{vector} \; \alpha \; O$ \\
-        | \ttt{item} : $\lamb (\alpha : \TT) \to \lamb (a : \alpha) \to$ \\
-        \qquad $\lamb (n
-        : \NN) \to \lamb(\ell : \ttt{vector} \; \alpha \; n) \to \ttt{vector}
+        | \ttt{nil} : $\lamb (\alpha : \TT) \to \ttt{vector} \; \alpha \; O$ \\
+        | \ttt{cons} : $\lamb (\alpha : \TT, a : \alpha, n : \NN, t : \ttt{vector} \; \alpha \; n) \to \ttt{vector}
         \; \alpha \; (S \; n)$ 
     \end{tabular}
   \end{center} 
@@ -374,8 +389,8 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
 \section{Revisiting Logic}
 
 \begin{frame}{Computing with Proofs}
- Suppose $P, Q$ are propositions with proofs $p, q$, respectively. What is a
- proof of the ... 
+ Suppose $P, Q$ are propositions with proofs $p, q$, respectively. How do we
+ computationally get a proof of ...\pause 
  \begin{itemize}
    \item conjunction, $P \wedge Q$? \pause \hfill {\small pair of proofs $(p, q)$.}
      \pause
@@ -389,7 +404,7 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
  \end{itemize}
 \pause
  Suppose $S$ is a set and $T : S \to \text{Prop}$ a proposition over $S$. What
- is a proof of the quantified statement ...
+ is a proof of the quantified statement ... \pause
  \begin{itemize}
    \item  $\forall x \in S, T(x)$? \pause \hfill {\small
      function turning $(x \in S) \to \text{proof }t(x)$.}
@@ -406,32 +421,33 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
 \begin{frame}{The Curry-Howard Correspondence}
   \begin{alertblock}{\Large\centering \emph{types $\rightleftharpoons$ propositions}
     \quad \emph{terms $\rightleftharpoons$ proofs} }
+\pause
 
     \begin{center}
     \begin{tabular}{c|c||c|c}
     Type & Proposition & Expression & Proof  \\ \hline
-    \only<1>{???}\only<2->{\ttt{combine} $\alpha$ $\beta$} & $P \wedge Q$ &
-    \only<1>{???}\only<2->{$\ttt{pair} \; a \; b$} & $(p, q)$ \\
-    \only<1-2>{???}\only<3->{\ttt{choose} $\alpha$ $\beta$} & $P \vee Q$ &
-    \only<1-2>{???}\only<3->{$\ttt{fst} \; a, \ttt{snd} \; b$} & $(1, p), (2, q)$\\
-    \only<1-3>{???}\only<4->{$\alpha \to \beta$} & $P \to Q$ & 
-    \only<1-3>{???}\only<4->{$\lamb : a \mapsto b$} & $f : p \mapsto q$ \\
-    \only<1-4>{???}\only<5->{\ttt{unit}} & true & 
-    \only<1-4>{???}\only<5->{$*$} & $\exists$ \\
-    \only<1-5>{???}\only<6->{\ttt{none}} & false &
-    \only<1-5>{???}\only<6->{\texttwemoji{x}} & $\nexists$ \\
-    \only<1-6>{???}\only<7->{$\alpha \to \ttt{none}$} & $\neg P$ & 
-    \only<1-6>{???}\only<7->{$\lamb : a \mapsto \lightning$} & $f : p
+    \only<2>{???}\only<3->{\ttt{combine} $\alpha$ $\beta$} & $P \wedge Q$ &
+    \only<2>{???}\only<3->{$\ttt{pair} \; a \; b$} & $(p, q)$ \\
+    \only<2-3>{???}\only<4->{\ttt{choose} $\alpha$ $\beta$} & $P \vee Q$ &
+    \only<2-3>{???}\only<4->{$\ttt{fst} \; a, \ttt{snd} \; b$} & $(1, p), (2, q)$\\
+    \only<2-4>{???}\only<5->{$\alpha \to \beta$} & $P \to Q$ & 
+    \only<2-4>{???}\only<5->{$\lamb : a \mapsto b$} & $f : p \mapsto q$ \\
+    \only<2-5>{???}\only<6->{\ttt{unit}} & true & 
+    \only<2-5>{???}\only<6->{$*$} & $\exists$ \\
+    \only<2-6>{???}\only<7->{\ttt{none}} & false &
+    \only<2-6>{???}\only<7->{\texttwemoji{x}} & $\nexists$ \\
+    \only<2-7>{???}\only<8->{$\alpha \to \ttt{none}$} & $\neg P$ & 
+    \only<2-7>{???}\only<8->{$\lamb : a \mapsto \lightning$} & $f : p
     \mapsto \bot$ \\ 
-    \only<1-7>{???}\only<8->{$\lamb(a : \alpha) \to \beta$} & $\forall x \in P$,
+    \only<2-8>{???}\only<9->{$\lamb(a : \alpha) \to \beta$} & $\forall x \in P$,
     $Q(x)$ &
-    \only<1-7>{???}\only<8->{$\lamb : a \mapsto b(a)$} & $f : x \mapsto q(x)$ \\
+    \only<2-8>{???}\only<9->{$\lamb : a \mapsto b(a)$} & $f : x \mapsto q(x)$ \\
    ??? & $\exists x \in P$, $Q(x)$ & ??? & $(x, q(x))$
    \end{tabular}
     \end{center}   
  \end{alertblock}
  \begin{center}
-  \only<9->{
+  \only<10->{
    \vspace{-1em}
     \Large$\Downarrow$ 
 
@@ -485,7 +501,7 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
     In fact, we actually
     need $\TT : \TT_1$, and then $\TT_1 : \TT_2$, etc. The $\TT_i$s are called
     \emph{type universes} and this is more of a technical point that's need to
-    make things work, but often isn't relevant. . 
+    make things work, but often isn't relevant.  
 \end{frame}
 
 
@@ -517,8 +533,7 @@ $S \; (S \; O) \sim \text{succ}(\text{succ}(0)) = \text{succ}(1) = 2 \in \NN$ \\
     \begin{tabular}{l}
       \ttt{inductive leq} : $\lamb (m : \NN) \to \lamb (n : \NN) \to \TT$ \\
       | \ttt{leq-O} : $\lamb (n : \NN) \to \ttt{leq} \; O \; n $ \\
-      | \ttt{leq-S} : $\lamb (m : \NN) \to \lamb (n : \NN$) \\
-      \quad $\to \lamb (H:
+      | \ttt{leq-S} : $\lamb (m : \NN, n : \NN, H:
       \ttt{leq} \; m \; n) \to \ttt{leq} \; (S \; m) \; (S \; n)$
     \end{tabular}
   \end{center}
